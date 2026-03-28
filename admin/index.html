@@ -1,0 +1,1318 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel CMS — Maquinados Jaco</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      :root {
+        --bg: #0d0e12;
+        --surface: #14161c;
+        --card: #1c1f28;
+        --border: rgba(255,255,255,0.08);
+        --border-focus: #df040a;
+        --red: #df040a;
+        --red-dim: rgba(223,4,10,0.12);
+        --blue: #012a84;
+        --white: #ffffff;
+        --gray: #8a8fa3;
+        --text: #e2e4ec;
+        --text-dim: rgba(226,228,236,0.55);
+        --sidebar-w: 248px;
+        --radius: 8px;
+        --shadow: 0 8px 32px rgba(0,0,0,0.5);
+        --transition: 0.2s ease;
+      }
+      html, body { height: 100%; }
+      body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+      a { color: inherit; text-decoration: none; }
+      img { display: block; max-width: 100%; }
+
+      /* ── LOGIN SCREEN ──────────────────────── */
+      #loginScreen {
+        position: fixed; inset: 0; background: var(--bg);
+        display: flex; align-items: center; justify-content: center;
+        z-index: 9999; padding: 1rem;
+      }
+      .login-card {
+        background: var(--surface); border: 1px solid var(--border);
+        border-radius: 16px; padding: 2.75rem 2.25rem;
+        width: 100%; max-width: 400px; box-shadow: var(--shadow);
+      }
+      .login-logo {
+        width: 56px; height: 56px; border-radius: 12px; background: var(--red);
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 800; font-size: 1.3rem; color: var(--white);
+        margin-bottom: 1.5rem; letter-spacing: -0.02em;
+      }
+      .login-card h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.3rem; }
+      .login-card > p { font-size: 0.85rem; color: var(--gray); margin-bottom: 2rem; }
+      .field-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1.25rem; }
+      .field-group label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--gray); }
+      .pw-wrapper { position: relative; }
+      .pw-wrapper input { width: 100%; padding-right: 2.8rem; }
+      .pw-toggle {
+        position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%);
+        background: none; border: none; cursor: pointer; color: var(--gray);
+        font-size: 0.9rem; padding: 0.2rem; transition: color var(--transition);
+      }
+      .pw-toggle:hover { color: var(--white); }
+      input[type="text"], input[type="password"], input[type="url"], input[type="tel"], input[type="email"], textarea, select {
+        background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+        border-radius: var(--radius); padding: 0.7rem 1rem;
+        font-size: 0.875rem; color: var(--text); font-family: 'Inter', sans-serif;
+        transition: border-color var(--transition), background var(--transition);
+        outline: none; width: 100%;
+      }
+      input:focus, textarea:focus, select:focus {
+        border-color: var(--border-focus); background: var(--red-dim);
+      }
+      input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.2); }
+      textarea { resize: vertical; min-height: 90px; }
+      select option { background: var(--surface); }
+      .error-msg { font-size: 0.82rem; color: #ff6b6e; min-height: 1.2rem; margin-bottom: 0.5rem; }
+      .btn-login {
+        width: 100%; padding: 0.85rem; background: var(--red); color: var(--white);
+        border: none; border-radius: var(--radius); font-size: 0.9rem; font-weight: 600;
+        cursor: pointer; transition: background var(--transition), opacity var(--transition);
+        display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      }
+      .btn-login:hover { background: #b80308; }
+      .btn-login:disabled { opacity: 0.6; cursor: not-allowed; }
+
+      /* ── ADMIN LAYOUT ──────────────────────── */
+      #adminPanel { display: none; min-height: 100vh; }
+
+      .sidebar {
+        position: fixed; left: 0; top: 0; bottom: 0; width: var(--sidebar-w);
+        background: var(--surface); border-right: 1px solid var(--border);
+        display: flex; flex-direction: column; z-index: 100; overflow-y: auto;
+      }
+      .sidebar-header {
+        display: flex; align-items: center; gap: 0.85rem;
+        padding: 1.4rem 1.25rem 1.2rem; border-bottom: 1px solid var(--border);
+      }
+      .sidebar-logo {
+        width: 38px; height: 38px; border-radius: 8px; background: var(--red);
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 800; font-size: 0.95rem; color: var(--white); flex-shrink: 0;
+      }
+      .sidebar-title { font-size: 0.9rem; font-weight: 700; color: var(--white); }
+      .sidebar-subtitle { font-size: 0.7rem; color: var(--gray); }
+
+      .sidebar-nav { flex: 1; padding: 1rem 0.75rem; display: flex; flex-direction: column; gap: 0.2rem; }
+      .nav-item {
+        display: flex; align-items: center; gap: 0.65rem;
+        padding: 0.6rem 0.85rem; border-radius: var(--radius);
+        font-size: 0.84rem; font-weight: 500; color: var(--text-dim);
+        transition: var(--transition); cursor: pointer;
+      }
+      .nav-item:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+      .nav-item.active { background: var(--red-dim); color: var(--red); font-weight: 600; }
+      .nav-item i { width: 16px; text-align: center; font-size: 0.8rem; }
+
+      .sidebar-footer { padding: 1rem 0.75rem; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 0.6rem; }
+      .btn-save {
+        display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+        padding: 0.75rem 1rem; background: var(--red); color: var(--white);
+        border: none; border-radius: var(--radius); font-size: 0.85rem; font-weight: 600;
+        cursor: pointer; transition: background var(--transition), opacity var(--transition); width: 100%;
+      }
+      .btn-save:hover { background: #b80308; }
+      .btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
+      .btn-logout {
+        display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+        padding: 0.6rem 1rem; background: transparent; color: var(--gray);
+        border: 1px solid var(--border); border-radius: var(--radius);
+        font-size: 0.82rem; font-weight: 500; cursor: pointer;
+        transition: var(--transition); width: 100%;
+      }
+      .btn-logout:hover { color: var(--white); border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); }
+
+      .main-content {
+        margin-left: var(--sidebar-w); min-height: 100vh;
+        padding: 2rem; display: flex; flex-direction: column; gap: 2rem;
+      }
+
+      /* ── TOAST ─────────────────────────────── */
+      #toast {
+        position: fixed; top: 1.5rem; right: 1.5rem; z-index: 9000;
+        padding: 0.85rem 1.5rem; border-radius: var(--radius);
+        font-size: 0.875rem; font-weight: 500; opacity: 0;
+        transform: translateY(-8px); transition: opacity 0.3s, transform 0.3s;
+        max-width: 360px; pointer-events: none;
+      }
+      #toast.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+      #toast.success { background: #1a7a45; color: #fff; }
+      #toast.error { background: #9b1c1c; color: #fff; }
+
+      /* ── EDITOR SECTIONS ───────────────────── */
+      .editor-section {
+        background: var(--surface); border: 1px solid var(--border);
+        border-radius: 12px; overflow: hidden;
+      }
+      .section-header {
+        display: flex; align-items: flex-start; justify-content: space-between;
+        padding: 1.5rem 1.75rem 1.25rem; border-bottom: 1px solid var(--border);
+        gap: 1rem; flex-wrap: wrap;
+      }
+      .section-header h2 { font-size: 1rem; font-weight: 700; color: var(--white); }
+      .section-header p { font-size: 0.8rem; color: var(--gray); margin-top: 0.2rem; }
+      .preview-link {
+        display: inline-flex; align-items: center; gap: 0.4rem;
+        font-size: 0.75rem; color: var(--gray); border: 1px solid var(--border);
+        padding: 0.35rem 0.85rem; border-radius: 20px;
+        transition: var(--transition); white-space: nowrap; flex-shrink: 0;
+      }
+      .preview-link:hover { color: var(--white); border-color: rgba(255,255,255,0.25); }
+
+      .fields-body { padding: 1.75rem; display: flex; flex-direction: column; gap: 1.25rem; }
+      .fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+      .full-width { grid-column: 1 / -1; }
+
+      .field-group { display: flex; flex-direction: column; gap: 0.4rem; }
+      .field-group label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--gray); }
+      .field-hint { font-size: 0.72rem; color: var(--text-dim); margin-top: 0.2rem; }
+
+      /* ── IMAGE FIELD ───────────────────────── */
+      .image-field { display: flex; flex-direction: column; gap: 0.75rem; }
+      .img-preview-wrap {
+        width: 100%; height: 140px; border-radius: var(--radius);
+        border: 1px dashed var(--border); overflow: hidden;
+        display: flex; align-items: center; justify-content: center;
+        background: rgba(255,255,255,0.02); position: relative;
+      }
+      .img-preview-wrap img { width: 100%; height: 100%; object-fit: cover; }
+      .img-placeholder { color: var(--gray); font-size: 0.8rem; display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+      .img-placeholder i { font-size: 1.5rem; opacity: 0.4; }
+      .image-controls { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+      .image-controls .url-input { flex: 1; min-width: 200px; }
+      .btn-upload-label {
+        display: inline-flex; align-items: center; gap: 0.5rem;
+        padding: 0.65rem 1rem; background: var(--card);
+        border: 1px solid var(--border); border-radius: var(--radius);
+        font-size: 0.82rem; font-weight: 500; cursor: pointer; color: var(--text);
+        transition: var(--transition); white-space: nowrap; flex-shrink: 0;
+      }
+      .btn-upload-label:hover { border-color: var(--red); color: var(--red); }
+      .btn-upload-label input { display: none; }
+      .uploading-indicator { font-size: 0.78rem; color: var(--gray); display: flex; align-items: center; gap: 0.4rem; }
+
+      /* ── ACCORDION (for Servicios / Industrias) */
+      .accordion-list { display: flex; flex-direction: column; gap: 0.75rem; padding: 1.25rem 1.75rem; }
+      .accordion-item { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+      .accordion-header {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 0.9rem 1.1rem; cursor: pointer;
+        background: var(--card); transition: background var(--transition);
+        user-select: none;
+      }
+      .accordion-header:hover { background: rgba(255,255,255,0.04); }
+      .accordion-header.open { background: rgba(223,4,10,0.08); border-bottom: 1px solid var(--border); }
+      .accordion-title { font-size: 0.875rem; font-weight: 600; color: var(--text); }
+      .accordion-icon { color: var(--gray); font-size: 0.75rem; transition: transform var(--transition); }
+      .accordion-header.open .accordion-icon { transform: rotate(180deg); }
+      .accordion-body { padding: 1.25rem; display: none; }
+      .accordion-body.open { display: block; }
+      .accordion-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+      /* ── DYNAMIC LIST (Capacidades) ────────── */
+      .dyn-list { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 0.5rem; }
+      .dyn-item { display: flex; gap: 0.5rem; align-items: center; }
+      .dyn-item input { flex: 1; }
+      .btn-remove-item {
+        background: none; border: 1px solid rgba(255,255,255,0.1); color: var(--gray);
+        border-radius: 6px; width: 32px; height: 32px; cursor: pointer; flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center; font-size: 0.75rem;
+        transition: var(--transition);
+      }
+      .btn-remove-item:hover { border-color: #ff6b6e; color: #ff6b6e; }
+      .btn-add-item {
+        display: inline-flex; align-items: center; gap: 0.4rem;
+        padding: 0.5rem 0.9rem; background: rgba(255,255,255,0.04);
+        border: 1px dashed rgba(255,255,255,0.15); border-radius: var(--radius);
+        font-size: 0.8rem; color: var(--gray); cursor: pointer;
+        transition: var(--transition); margin-top: 0.25rem;
+      }
+      .btn-add-item:hover { border-color: var(--red); color: var(--red); background: var(--red-dim); }
+
+      /* ── CLIENTES GRID ─────────────────────── */
+      .clients-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; padding: 1.25rem 1.75rem; }
+      .client-editor {
+        background: var(--card); border: 1px solid var(--border);
+        border-radius: var(--radius); padding: 1rem; display: flex; flex-direction: column; gap: 0.75rem;
+      }
+      .client-logo-preview {
+        width: 60px; height: 60px; border-radius: 6px; border: 1px solid var(--border);
+        object-fit: contain; background: rgba(255,255,255,0.05);
+      }
+
+      /* ── DIVIDER ───────────────────────────── */
+      .section-divider { height: 1px; background: var(--border); margin: 0.5rem 0; }
+
+      /* ── RESPONSIVE ────────────────────────── */
+      @media (max-width: 900px) {
+        .sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+        .sidebar.open { transform: translateX(0); }
+        .main-content { margin-left: 0; }
+        .mobile-menu-toggle {
+          display: flex; position: fixed; top: 1rem; left: 1rem; z-index: 200;
+          width: 40px; height: 40px; border-radius: 8px;
+          background: var(--surface); border: 1px solid var(--border);
+          align-items: center; justify-content: center; cursor: pointer; color: var(--text);
+        }
+      }
+      @media (min-width: 901px) {
+        .mobile-menu-toggle { display: none; }
+      }
+      @media (max-width: 640px) {
+        .fields-grid, .accordion-grid { grid-template-columns: 1fr; }
+        .main-content { padding: 1rem; }
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <!-- =====================================================
+     LOGIN SCREEN
+====================================================== -->
+    <div id="loginScreen">
+      <div class="login-card">
+        <div class="login-logo">MJ</div>
+        <h1>Panel de Administración</h1>
+        <p>Maquinados Jaco — Sistema de gestión de contenidos</p>
+
+        <div class="field-group">
+          <label>Contraseña</label>
+          <div class="pw-wrapper">
+            <input type="password" id="passwordInput" placeholder="••••••••••••••••" autocomplete="current-password" />
+            <button type="button" class="pw-toggle" id="pwToggle" aria-label="Mostrar contraseña">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="error-msg" id="loginError"></div>
+        <button class="btn-login" id="loginBtn">
+          <i class="fas fa-sign-in-alt"></i> Ingresar
+        </button>
+      </div>
+    </div>
+
+    <!-- =====================================================
+     ADMIN PANEL
+====================================================== -->
+    <div id="adminPanel">
+
+      <!-- Mobile sidebar toggle -->
+      <button class="mobile-menu-toggle" id="sidebarToggle" aria-label="Menú">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <!-- ── SIDEBAR ───────────────────────── -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">MJ</div>
+          <div>
+            <div class="sidebar-title">Maquinados Jaco</div>
+            <div class="sidebar-subtitle">Panel CMS</div>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav" id="sidebarNav">
+          <a class="nav-item active" data-target="s-hero"><i class="fas fa-home"></i> Hero</a>
+          <a class="nav-item" data-target="s-nosotros"><i class="fas fa-users"></i> Nosotros</a>
+          <a class="nav-item" data-target="s-servicios"><i class="fas fa-cog"></i> Servicios</a>
+          <a class="nav-item" data-target="s-industrias"><i class="fas fa-industry"></i> Industrias</a>
+          <a class="nav-item" data-target="s-capacidades"><i class="fas fa-tools"></i> Capacidades</a>
+          <a class="nav-item" data-target="s-galeria"><i class="fas fa-images"></i> Galería</a>
+          <a class="nav-item" data-target="s-clientes"><i class="fas fa-building"></i> Clientes</a>
+          <a class="nav-item" data-target="s-contacto"><i class="fas fa-phone"></i> Contacto</a>
+          <a class="nav-item" data-target="s-footer"><i class="fas fa-grip-horizontal"></i> Footer</a>
+        </nav>
+
+        <div class="sidebar-footer">
+          <button class="btn-save" id="saveBtn">
+            <i class="fas fa-cloud-upload-alt"></i> Guardar Cambios
+          </button>
+          <a href="/" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.55rem 1rem;background:transparent;border:1px solid var(--border);border-radius:var(--radius);font-size:.8rem;color:var(--gray);transition:var(--transition);" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--gray)'">
+            <i class="fas fa-external-link-alt"></i> Ver sitio
+          </a>
+          <button class="btn-logout" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+          </button>
+        </div>
+      </aside>
+
+      <!-- ── MAIN CONTENT ──────────────────── -->
+      <main class="main-content">
+
+        <div id="toast"></div>
+
+        <!-- ══════════════════════════════════
+             HERO
+        ═══════════════════════════════════ -->
+        <div class="editor-section" id="s-hero">
+          <div class="section-header">
+            <div>
+              <h2><i class="fas fa-home" style="color:var(--red);margin-right:.5rem"></i>Hero</h2>
+              <p>Sección principal visible al cargar la página</p>
+            </div>
+            <a href="/#hero" target="_blank" class="preview-link"><i class="fas fa-eye"></i> Ver sección</a>
+          </div>
+          <div class="fields-body">
+            <div class="fields-grid">
+              <div class="field-group full-width">
+                <label>Badge (texto del chip superior)</label>
+                <input type="text" data-path="hero.badge" placeholder="Manufactura CNC de Precisión" />
+              </div>
+              <div class="field-group">
+                <label>Headline — Línea 1</label>
+                <input type="text" data-path="hero.headline_line1" placeholder="Precisión que" />
+              </div>
+              <div class="field-group">
+                <label>Headline — Palabra en rojo</label>
+                <input type="text" data-path="hero.headline_accent" placeholder="Impulsa" />
+              </div>
+              <div class="field-group full-width">
+                <label>Headline — Línea 3</label>
+                <input type="text" data-path="hero.headline_line3" placeholder="la Industria" />
+              </div>
+              <div class="field-group full-width">
+                <label>Descripción principal</label>
+                <textarea data-path="hero.subheading" rows="3" placeholder="Diseño y fabricación CNC a la medida…"></textarea>
+              </div>
+              <div class="field-group">
+                <label>Botón primario (rojo)</label>
+                <input type="text" data-path="hero.cta_primary" placeholder="Solicitar Cotización" />
+              </div>
+              <div class="field-group">
+                <label>Botón secundario (contorno)</label>
+                <input type="text" data-path="hero.cta_secondary" placeholder="Ver Servicios" />
+              </div>
+            </div>
+            <div class="field-group">
+              <label>Imagen de fondo del Hero</label>
+              <div class="image-field">
+                <div class="img-preview-wrap" id="preview-hero.bg_image_url">
+                  <div class="img-placeholder"><i class="fas fa-image"></i>Sin imagen</div>
+                </div>
+                <div class="image-controls">
+                  <input type="url" data-path="hero.bg_image_url" class="url-input" placeholder="https://…" />
+                  <label class="btn-upload-label">
+                    <i class="fas fa-upload"></i> Subir
+                    <input type="file" accept="image/jpeg,image/png,image/webp" data-upload-for="hero.bg_image_url" />
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══════════════════════════════════
+             NOSOTROS
+        ═══════════════════════════════════ -->
+        <div class="editor-section" id="s-nosotros">
+          <div class="section-header">
+            <div>
+              <h2><i class="fas fa-users" style="color:var(--red);margin-right:.5rem"></i>Nosotros</h2>
+              <p>Sección "Quiénes Somos" — texto e imagen del taller</p>
+            </div>
+            <a href="/#nosotros" target="_blank" class="preview-link"><i class="fas fa-eye"></i> Ver sección</a>
+          </div>
+          <div class="fields-body">
+            <div class="fields-grid">
+              <div class="field-group">
+                <label>Label (texto pequeño rojo)</label>
+                <input type="text" data-path="nosotros.label" placeholder="Quiénes Somos" />
+              </div>
+              <div class="field-group">
+                <label>Badge — Línea fuerte</label>
+                <input type="text" data-path="nosotros.badge_strong" placeholder="Desde 1 Pieza" />
+              </div>
+              <div class="field-group full-width">
+                <label>Badge — Subtexto</label>
+                <input type="text" data-path="nosotros.badge_span" placeholder="Sin mínimos de producción" />
+              </div>
+              <div class="field-group">
+                <label>Título — Línea principal</label>
+                <input type="text" data-path="nosotros.headline_main" placeholder="Ingeniería y precisión" />
+              </div>
+              <div class="field-group">
+                <label>Título — Parte en rojo</label>
+                <input type="text" data-path="nosotros.headline_accent" placeholder="en cada pieza" />
+              </div>
+              <div class="field-group full-width">
+                <label>Párrafo 1</label>
+                <textarea data-path="nosotros.desc1" rows="4"></textarea>
+              </div>
+              <div class="field-group full-width">
+                <label>Párrafo 2</label>
+                <textarea data-path="nosotros.desc2" rows="4"></textarea>
+              </div>
+              <div class="field-group">
+                <label>Misión</label>
+                <textarea data-path="nosotros.mision" rows="4"></textarea>
+              </div>
+              <div class="field-group">
+                <label>Visión</label>
+                <textarea data-path="nosotros.vision" rows="4"></textarea>
+              </div>
+            </div>
+            <div class="field-group">
+              <label>Imagen del taller</label>
+              <div class="image-field">
+                <div class="img-preview-wrap" id="preview-nosotros.image_url">
+                  <div class="img-placeholder"><i class="fas fa-image"></i>Sin imagen</div>
+                </div>
+                <div class="image-controls">
+                  <input type="url" data-path="nosotros.image_url" class="url-input" placeholder="https://…" />
+                  <label class="btn-upload-label">
+                    <i class="fas fa-upload"></i> Subir
+                    <input type="file" accept="image/jpeg,image/png,image/webp" data-upload-for="nosotros.image_url" />
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══════════════════════════════════
+             SERVICIOS
+        ═══════════════════════════════════ -->
+        <div class="editor-section" id="s-servicios">
+          <div class="section-header">
+            <div>
+              <h2><i class="fas fa-cog" style="color:var(--red);margin-right:.5rem"></i>Servicios</h2>
+              <p>Tarjetas flip — Haz clic en cada servicio para editarlo</p>
+            </div>
+            <a href="/#servicios" target="_blank" class="preview-link"><i class="fas fa-eye"></i> Ver sección</a>
+          </div>
+          <div class="accordion-list" id="serviciosAccordion"></div>
+        </div>
+
+        <!-- ══════════════════════════════════
+             INDUSTRIAS
+        ═══════════════════════════════════ -->
+        <div class="editor-section" id="s-industrias">
+          <div class="section-header">
+            <div>
+              <h2><i class="fas fa-industry" style="color:var(--red);margin-right:.5rem"></i>Industrias</h2>
+              <p>Tarjetas con imagen de fondo — sectores atendidos</p>
+            </div>
+            <a href="/#industrias" target="_blank" class="preview-link"><i class="fas fa-eye"></i> Ver sección</a>
+          </div>
+          <div class="accordion-list" id="industriasAccordion"></div>
+        </div>
+
+        <!-- ══════════════════════════════════
+             CAPACIDADES
+        ═══════════════════════════════════ -->
+        <div class="editor-section" id="s-capacidades">
+          <div class="section-header">
+            <div>
+              <h2><i class="fas fa-tools" style="color:var(--red);margin-right:.5rem"></i>Capacidades</h2>
+              <p>Lista de equipos y frase destacada</p>
+            </div>
+            <a href="/#capacidades" target="_blank" class="preview-link"><i class="fas fa-eye"></i> Ver sección</a>
+          </div>
+          <div class="fields-body">
+            <div class="field-group">
+              <label>Lista de equipos</label>
+              <div class="dyn-list" id="capItemsList"></div>
+              <button class="btn-add-item" id="addCapItem"><i class="fas fa-plus"></i> Agregar equipo</button>
+            </div>
+            <div class="field-group">
+              <label>Frase destacada (comillas)</label>
+              <textarea data-path="capacidades.quote" rows="3"></textarea>
+            </div>
+            <div class="field-group">
+              <label>Imagen del taller (derecha)</label>
+              <div class="image-field">
+                <div class="img-preview-wrap" id="preview-capacidades.image_url">
+                  <div class="img-placeholder"><i class="fas fa-image"></i>Sin imagen</div>
+                </div>
+                <div class="image-controls">
+                  <input type="url" data-path="capacidades.image_url" class="url-input" placeholder="https://…" />
+                  <label class="btn-upload-label">
+                    <i class="fas fa-upload"></i> Subir
+                    <input type="file" accept="image/jpeg,image/png,image/webp" data-upload-for="capacidades.image_url" />
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══════════════════════════════════
+             GALERÍA
+        ═══════════════════════════════════ -->
+        <div class="editor-section" id="s-galeria">
+          <div class="section-header">
+            <div>
+              <h2><i class="fas fa-images" style="color:var(--red);margin-right:.5rem"></i>Galería</h2>
+              <p>Imágenes con lightbox — Proyectos realizados</p>
+            </div>
+            <a href="/#galeria" target="_blank" class="preview-link"><i class="fas fa-eye"></i> Ver sección</a>
+          </div>
+          <div class="accordion-list" id="galeriaAccordion"></div>
+        </div>
+
+        <!-- ══════════════════════════════════
+             CLIENTES
+        ═══════════════════════════════════ -->
+        <div class="editor-section" id="s-clientes">
+          <div class="section-header">
+            <div>
+              <h2><i class="fas fa-building" style="color:var(--red);margin-right:.5rem"></i>Clientes</h2>
+              <p>Logos del carrusel — Agrega el nombre y logo de cada cliente</p>
+            </div>
+            <a href="/#clientes" target="_blank" class="preview-link"><i class="fas fa-eye"></i> Ver sección</a>
+          </div>
+          <div class="clients-grid" id="clientesGrid"></div>
+        </div>
+
+        <!-- ══════════════════════════════════
+             CONTACTO
+        ═══════════════════════════════════ -->
+        <div class="editor-section" id="s-contacto">
+          <div class="section-header">
+            <div>
+              <h2><i class="fas fa-phone" style="color:var(--red);margin-right:.5rem"></i>Contacto</h2>
+              <p>Información de contacto visible en la sección y el footer</p>
+            </div>
+            <a href="/#contacto" target="_blank" class="preview-link"><i class="fas fa-eye"></i> Ver sección</a>
+          </div>
+          <div class="fields-body">
+            <div class="fields-grid">
+              <div class="field-group">
+                <label>Teléfono (texto visible)</label>
+                <input type="tel" data-path="contacto.phone_display" placeholder="811 488 3334" />
+              </div>
+              <div class="field-group">
+                <label>Teléfono (href: tel:…)</label>
+                <input type="text" data-path="contacto.phone_href" placeholder="tel:8114883334" />
+              </div>
+              <div class="field-group full-width">
+                <label>Correo electrónico</label>
+                <input type="email" data-path="contacto.email" placeholder="contacto@maquinadosjaco.com" />
+              </div>
+              <div class="field-group">
+                <label>Dirección — Línea 1</label>
+                <input type="text" data-path="contacto.address_line1" placeholder="Fresno 2112, Moderna" />
+              </div>
+              <div class="field-group">
+                <label>Dirección — Línea 2</label>
+                <input type="text" data-path="contacto.address_line2" placeholder="64530 Monterrey, N.L., México" />
+              </div>
+              <div class="field-group">
+                <label>Horario Lun-Vie</label>
+                <input type="text" data-path="contacto.hours_weekday" placeholder="Lun – Vie: 8:00 a.m. – 6:00 p.m." />
+              </div>
+              <div class="field-group">
+                <label>Horario Sábado</label>
+                <input type="text" data-path="contacto.hours_saturday" placeholder="Sáb: 9:00 a.m. – 1:00 p.m." />
+              </div>
+              <div class="field-group full-width">
+                <label>Link de WhatsApp (href completo)</label>
+                <input type="url" data-path="contacto.whatsapp_href" placeholder="https://wa.me/52811…" />
+                <span class="field-hint">El botón flotante de WhatsApp usa este enlace.</span>
+              </div>
+              <div class="field-group full-width">
+                <label>URL embed de Google Maps</label>
+                <input type="url" data-path="contacto.maps_embed_src" placeholder="https://maps.google.com/maps?q=…&output=embed" />
+                <span class="field-hint">Ve a Google Maps → Compartir → Insertar un mapa → copia solo la URL del src del iframe.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══════════════════════════════════
+             FOOTER
+        ═══════════════════════════════════ -->
+        <div class="editor-section" id="s-footer">
+          <div class="section-header">
+            <div>
+              <h2><i class="fas fa-grip-horizontal" style="color:var(--red);margin-right:.5rem"></i>Footer</h2>
+              <p>Tagline, copyright y redes sociales</p>
+            </div>
+          </div>
+          <div class="fields-body">
+            <div class="fields-grid">
+              <div class="field-group full-width">
+                <label>Tagline (descripción corta de la empresa)</label>
+                <textarea data-path="footer.tagline" rows="3"></textarea>
+              </div>
+              <div class="field-group">
+                <label>Texto de copyright</label>
+                <input type="text" data-path="footer.copyright" placeholder="© 2026 Maquinados Jaco…" />
+              </div>
+              <div class="field-group">
+                <label>Crédito de diseñador</label>
+                <input type="text" data-path="footer.designer" placeholder="Diseñado por…" />
+              </div>
+              <div class="field-group">
+                <label>Facebook URL</label>
+                <input type="url" data-path="footer.social_facebook" placeholder="https://facebook.com/…" />
+              </div>
+              <div class="field-group">
+                <label>Instagram URL</label>
+                <input type="url" data-path="footer.social_instagram" placeholder="https://instagram.com/…" />
+              </div>
+              <div class="field-group full-width">
+                <label>LinkedIn URL</label>
+                <input type="url" data-path="footer.social_linkedin" placeholder="https://linkedin.com/…" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div><!-- /adminPanel -->
+
+    <!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+    <script>
+      'use strict';
+
+      /* ── State ───────────────────────────── */
+      let CONTENT = {};
+      let TOKEN = null;
+      const API = { login: '/api/login', content: '/api/content', save: '/api/save', upload: '/api/upload' };
+
+      /* ── Path helpers ────────────────────── */
+      function getPath(obj, path) {
+        return path.split('.').reduce((o, k) => (o && o[k] !== undefined ? o[k] : undefined), obj);
+      }
+      function setPath(obj, path, value) {
+        const keys = path.split('.');
+        let cur = obj;
+        for (let i = 0; i < keys.length - 1; i++) {
+          if (typeof cur[keys[i]] !== 'object' || cur[keys[i]] === null) cur[keys[i]] = {};
+          cur = cur[keys[i]];
+        }
+        cur[keys[keys.length - 1]] = value;
+      }
+
+      /* ── Toast ───────────────────────────── */
+      function showToast(msg, type = 'success') {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.className = 'show ' + type;
+        clearTimeout(t._timer);
+        t._timer = setTimeout(() => { t.className = ''; }, 3500);
+      }
+
+      /* ── Auth ────────────────────────────── */
+      function checkAuth() {
+        const stored = localStorage.getItem('cms_token');
+        if (!stored) return false;
+        try {
+          const payload = JSON.parse(atob(stored.split('.')[1]));
+          if (Date.now() / 1000 >= payload.exp) { localStorage.removeItem('cms_token'); return false; }
+          TOKEN = stored;
+          return true;
+        } catch { localStorage.removeItem('cms_token'); return false; }
+      }
+
+      function showLogin() {
+        document.getElementById('loginScreen').style.display = 'flex';
+        document.getElementById('adminPanel').style.display = 'none';
+      }
+      function showAdmin() {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('adminPanel').style.display = 'block';
+      }
+      function logout() {
+        localStorage.removeItem('cms_token');
+        TOKEN = null;
+        CONTENT = {};
+        showLogin();
+      }
+
+      /* ── Login flow ──────────────────────── */
+      async function doLogin() {
+        const pwd = document.getElementById('passwordInput').value.trim();
+        const errEl = document.getElementById('loginError');
+        const btn = document.getElementById('loginBtn');
+        if (!pwd) { errEl.textContent = 'Ingresa tu contraseña.'; return; }
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verificando…';
+        errEl.textContent = '';
+
+        try {
+          const r = await fetch(API.login, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: pwd }),
+          });
+          const data = await r.json();
+          if (!r.ok) throw new Error(data.error || 'Error al autenticar');
+
+          TOKEN = data.token;
+          localStorage.setItem('cms_token', TOKEN);
+          document.getElementById('passwordInput').value = '';
+          showAdmin();
+          await loadContent();
+        } catch (err) {
+          errEl.textContent = err.message;
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Ingresar';
+        }
+      }
+
+      /* ── Content load ────────────────────── */
+      async function loadContent() {
+        try {
+          const r = await fetch(API.content + '?t=' + Date.now(), {
+            headers: { 'Authorization': 'Bearer ' + TOKEN },
+          });
+          if (r.status === 401) { logout(); return; }
+          if (!r.ok) throw new Error('Error al cargar contenido');
+          CONTENT = await r.json();
+          populateForm();
+        } catch (err) {
+          showToast('No se pudo cargar el contenido: ' + err.message, 'error');
+        }
+      }
+
+      /* ── Populate form ───────────────────── */
+      function populateForm() {
+        // Simple data-path inputs
+        document.querySelectorAll('[data-path]').forEach(el => {
+          const val = getPath(CONTENT, el.dataset.path);
+          if (val !== undefined && val !== null) el.value = val;
+          updateImagePreview(el.dataset.path, val);
+        });
+
+        buildServiciosAccordion();
+        buildIndustriasAccordion();
+        buildCapacidadesList();
+        buildGaleriaAccordion();
+        buildClientesGrid();
+      }
+
+      /* ── Image preview update ─────────────── */
+      function updateImagePreview(path, url) {
+        const wrap = document.getElementById('preview-' + path);
+        if (!wrap) return;
+        if (url) {
+          wrap.innerHTML = `<img src="${url}" alt="Preview" onerror="this.parentNode.innerHTML='<div class=\\"img-placeholder\\"><i class=\\"fas fa-exclamation-circle\\"></i>Imagen no disponible</div>'" />`;
+        } else {
+          wrap.innerHTML = '<div class="img-placeholder"><i class="fas fa-image"></i>Sin imagen</div>';
+        }
+      }
+
+      /* ── Image upload ─────────────────────── */
+      async function uploadImage(file, path, previewId) {
+        const wrap = previewId ? document.getElementById(previewId) : null;
+        if (wrap) wrap.innerHTML = '<div class="img-placeholder"><i class="fas fa-spinner fa-spin"></i>Subiendo…</div>';
+
+        const fd = new FormData();
+        fd.append('file', file);
+
+        try {
+          const r = await fetch(API.upload, {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + TOKEN },
+            body: fd,
+          });
+          if (r.status === 401) { logout(); return null; }
+          const data = await r.json();
+          if (!r.ok) throw new Error(data.error || 'Error al subir');
+
+          // Update CONTENT and all matching inputs
+          setPath(CONTENT, path, data.url);
+          document.querySelectorAll(`[data-path="${path}"]`).forEach(inp => { inp.value = data.url; });
+          updateImagePreview(path, data.url);
+          showToast('Imagen subida correctamente ✓');
+          return data.url;
+        } catch (err) {
+          showToast('Error al subir imagen: ' + err.message, 'error');
+          if (wrap) wrap.innerHTML = '<div class="img-placeholder"><i class="fas fa-exclamation-circle"></i>Error</div>';
+          return null;
+        }
+      }
+
+      /* ── Save content ─────────────────────── */
+      async function saveContent() {
+        const btn = document.getElementById('saveBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando…';
+
+        try {
+          const r = await fetch(API.save, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + TOKEN,
+            },
+            body: JSON.stringify(CONTENT),
+          });
+          if (r.status === 401) { logout(); return; }
+          const data = await r.json();
+          if (!r.ok) throw new Error(data.error || 'Error al guardar');
+
+          showToast('¡Cambios guardados correctamente! Los cambios se verán en el sitio en ~1 minuto.');
+        } catch (err) {
+          showToast('Error al guardar: ' + err.message, 'error');
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Guardar Cambios';
+        }
+      }
+
+      /* ── Bind auto-update inputs ──────────── */
+      function bindInput(el) {
+        el.addEventListener('input', () => {
+          setPath(CONTENT, el.dataset.path, el.value);
+          updateImagePreview(el.dataset.path, el.value);
+        });
+      }
+      function bindFileInput(el) {
+        el.addEventListener('change', () => {
+          if (!el.files[0]) return;
+          const path = el.dataset.uploadFor;
+          const previewId = 'preview-' + path;
+          uploadImage(el.files[0], path, previewId);
+          el.value = ''; // reset so same file can be re-uploaded
+        });
+      }
+
+      /* ═══════════════════════════════════════
+         DYNAMIC SECTION BUILDERS
+      ══════════════════════════════════════ */
+
+      /* ── Servicios accordion ──────────────── */
+      function buildServiciosAccordion() {
+        const container = document.getElementById('serviciosAccordion');
+        if (!container) return;
+        const items = Array.isArray(CONTENT.servicios) ? CONTENT.servicios : [];
+        container.innerHTML = '';
+
+        items.forEach((s, i) => {
+          const prefix = `servicios[${i}]`;
+          const div = document.createElement('div');
+          div.className = 'accordion-item';
+          div.innerHTML = `
+            <div class="accordion-header" data-acc="${prefix}">
+              <span class="accordion-title">${s.front_title || 'Servicio ' + (i + 1)}</span>
+              <i class="fas fa-chevron-down accordion-icon"></i>
+            </div>
+            <div class="accordion-body" id="acc-${i}-servicios">
+              <div class="accordion-grid">
+                <div class="field-group">
+                  <label>Ícono (clase Font Awesome)</label>
+                  <input type="text" data-path-arr="servicios,${i},front_icon" value="${s.front_icon || ''}" placeholder="fas fa-cog" />
+                </div>
+                <div class="field-group">
+                  <label>Título del frente</label>
+                  <input type="text" data-path-arr="servicios,${i},front_title" value="${s.front_title || ''}" />
+                </div>
+                <div class="field-group">
+                  <label>Tag (etiqueta del reverso)</label>
+                  <input type="text" data-path-arr="servicios,${i},back_tag" value="${s.back_tag || ''}" />
+                </div>
+                <div class="field-group">
+                  <label>Título del reverso</label>
+                  <input type="text" data-path-arr="servicios,${i},back_title" value="${s.back_title || ''}" />
+                </div>
+                <div class="field-group" style="grid-column:1/-1">
+                  <label>Descripción del reverso</label>
+                  <textarea data-path-arr="servicios,${i},back_desc" rows="4">${s.back_desc || ''}</textarea>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem">
+                <div class="field-group">
+                  <label>Imagen frontal</label>
+                  <div class="image-field">
+                    <div class="img-preview-wrap" id="preview-srv-${i}-front" style="height:100px">
+                      ${s.front_image_url ? `<img src="${s.front_image_url}" alt="" />` : '<div class="img-placeholder"><i class="fas fa-image"></i></div>'}
+                    </div>
+                    <div class="image-controls">
+                      <input type="url" data-path-arr="servicios,${i},front_image_url" class="url-input" value="${s.front_image_url || ''}" placeholder="https://…" />
+                      <label class="btn-upload-label">
+                        <i class="fas fa-upload"></i>
+                        <input type="file" accept="image/jpeg,image/png,image/webp" data-upload-arr="servicios,${i},front_image_url" data-preview-id="preview-srv-${i}-front" />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="field-group">
+                  <label>Imagen del reverso</label>
+                  <div class="image-field">
+                    <div class="img-preview-wrap" id="preview-srv-${i}-back" style="height:100px">
+                      ${s.back_image_url ? `<img src="${s.back_image_url}" alt="" />` : '<div class="img-placeholder"><i class="fas fa-image"></i></div>'}
+                    </div>
+                    <div class="image-controls">
+                      <input type="url" data-path-arr="servicios,${i},back_image_url" class="url-input" value="${s.back_image_url || ''}" placeholder="https://…" />
+                      <label class="btn-upload-label">
+                        <i class="fas fa-upload"></i>
+                        <input type="file" accept="image/jpeg,image/png,image/webp" data-upload-arr="servicios,${i},back_image_url" data-preview-id="preview-srv-${i}-back" />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>`;
+          container.appendChild(div);
+        });
+
+        bindAccordionInputs(container);
+      }
+
+      /* ── Industrias accordion ─────────────── */
+      function buildIndustriasAccordion() {
+        const container = document.getElementById('industriasAccordion');
+        if (!container) return;
+        const items = Array.isArray(CONTENT.industrias) ? CONTENT.industrias : [];
+        container.innerHTML = '';
+
+        items.forEach((ind, i) => {
+          const div = document.createElement('div');
+          div.className = 'accordion-item';
+          div.innerHTML = `
+            <div class="accordion-header">
+              <span class="accordion-title">${ind.name || 'Industria ' + (i + 1)}</span>
+              <i class="fas fa-chevron-down accordion-icon"></i>
+            </div>
+            <div class="accordion-body" id="acc-${i}-industrias">
+              <div class="accordion-grid">
+                <div class="field-group">
+                  <label>Nombre</label>
+                  <input type="text" data-path-arr="industrias,${i},name" value="${ind.name || ''}" />
+                </div>
+                <div class="field-group">
+                  <label>Ícono (clase FA)</label>
+                  <input type="text" data-path-arr="industrias,${i},icon" value="${ind.icon || ''}" placeholder="fas fa-car" />
+                </div>
+                <div class="field-group" style="grid-column:1/-1">
+                  <label>Descripción</label>
+                  <textarea data-path-arr="industrias,${i},desc" rows="3">${ind.desc || ''}</textarea>
+                </div>
+              </div>
+              <div class="field-group" style="margin-top:1rem">
+                <label>Imagen de fondo</label>
+                <div class="image-field">
+                  <div class="img-preview-wrap" id="preview-ind-${i}" style="height:100px">
+                    ${ind.image_url ? `<img src="${ind.image_url}" alt="" />` : '<div class="img-placeholder"><i class="fas fa-image"></i></div>'}
+                  </div>
+                  <div class="image-controls">
+                    <input type="url" data-path-arr="industrias,${i},image_url" class="url-input" value="${ind.image_url || ''}" placeholder="https://…" />
+                    <label class="btn-upload-label">
+                      <i class="fas fa-upload"></i>
+                      <input type="file" accept="image/jpeg,image/png,image/webp" data-upload-arr="industrias,${i},image_url" data-preview-id="preview-ind-${i}" />
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>`;
+          container.appendChild(div);
+        });
+
+        bindAccordionInputs(container);
+      }
+
+      /* ── Galería accordion ────────────────── */
+      function buildGaleriaAccordion() {
+        const container = document.getElementById('galeriaAccordion');
+        if (!container) return;
+        const items = Array.isArray(CONTENT.galeria) ? CONTENT.galeria : [];
+        container.innerHTML = '';
+
+        items.forEach((g, i) => {
+          const div = document.createElement('div');
+          div.className = 'accordion-item';
+          div.innerHTML = `
+            <div class="accordion-header">
+              <span class="accordion-title">Foto ${i + 1}: ${g.caption || '(sin título)'}</span>
+              <i class="fas fa-chevron-down accordion-icon"></i>
+            </div>
+            <div class="accordion-body" id="acc-${i}-galeria">
+              <div class="field-group" style="margin-bottom:1rem">
+                <label>Título / Caption</label>
+                <input type="text" data-path-arr="galeria,${i},caption" value="${g.caption || ''}" placeholder="Piezas de Precisión CNC" />
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                <div class="field-group">
+                  <label>Imagen miniatura (grid)</label>
+                  <div class="image-field">
+                    <div class="img-preview-wrap" id="preview-gal-${i}-thumb" style="height:100px">
+                      ${g.thumb_url ? `<img src="${g.thumb_url}" alt="" />` : '<div class="img-placeholder"><i class="fas fa-image"></i></div>'}
+                    </div>
+                    <div class="image-controls">
+                      <input type="url" data-path-arr="galeria,${i},thumb_url" class="url-input" value="${g.thumb_url || ''}" placeholder="https://…" />
+                      <label class="btn-upload-label">
+                        <i class="fas fa-upload"></i>
+                        <input type="file" accept="image/jpeg,image/png,image/webp" data-upload-arr="galeria,${i},thumb_url" data-preview-id="preview-gal-${i}-thumb" />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="field-group">
+                  <label>Imagen ampliada (lightbox)</label>
+                  <div class="image-field">
+                    <div class="img-preview-wrap" id="preview-gal-${i}-lb" style="height:100px">
+                      ${g.lightbox_url ? `<img src="${g.lightbox_url}" alt="" />` : '<div class="img-placeholder"><i class="fas fa-image"></i></div>'}
+                    </div>
+                    <div class="image-controls">
+                      <input type="url" data-path-arr="galeria,${i},lightbox_url" class="url-input" value="${g.lightbox_url || ''}" placeholder="https://… (mayor resolución)" />
+                      <label class="btn-upload-label">
+                        <i class="fas fa-upload"></i>
+                        <input type="file" accept="image/jpeg,image/png,image/webp" data-upload-arr="galeria,${i},lightbox_url" data-preview-id="preview-gal-${i}-lb" />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>`;
+          container.appendChild(div);
+        });
+
+        bindAccordionInputs(container);
+      }
+
+      /* ── Capacidades dynamic list ─────────── */
+      function buildCapacidadesList() {
+        const listEl = document.getElementById('capItemsList');
+        if (!listEl) return;
+        const items = Array.isArray(CONTENT.capacidades && CONTENT.capacidades.items) ? CONTENT.capacidades.items : [];
+        listEl.innerHTML = '';
+        items.forEach((item, i) => renderCapItem(listEl, item, i));
+      }
+
+      function renderCapItem(listEl, value, index) {
+        const row = document.createElement('div');
+        row.className = 'dyn-item';
+        row.dataset.index = index;
+        row.innerHTML = `
+          <input type="text" value="${value.replace(/"/g, '&quot;')}" placeholder="Equipo o capacidad…" />
+          <button class="btn-remove-item" title="Eliminar"><i class="fas fa-times"></i></button>`;
+        row.querySelector('input').addEventListener('input', (e) => {
+          if (!CONTENT.capacidades) CONTENT.capacidades = {};
+          if (!Array.isArray(CONTENT.capacidades.items)) CONTENT.capacidades.items = [];
+          CONTENT.capacidades.items[index] = e.target.value;
+        });
+        row.querySelector('.btn-remove-item').addEventListener('click', () => {
+          if (!CONTENT.capacidades || !Array.isArray(CONTENT.capacidades.items)) return;
+          CONTENT.capacidades.items.splice(index, 1);
+          buildCapacidadesList();
+        });
+        listEl.appendChild(row);
+      }
+
+      /* ── Clientes grid ────────────────────── */
+      function buildClientesGrid() {
+        const grid = document.getElementById('clientesGrid');
+        if (!grid) return;
+        const clients = Array.isArray(CONTENT.clientes) ? CONTENT.clientes : [];
+        grid.innerHTML = '';
+
+        clients.forEach((cl, i) => {
+          const card = document.createElement('div');
+          card.className = 'client-editor';
+          const logoSrc = cl.logo_url || '';
+          card.innerHTML = `
+            <div style="display:flex;align-items:center;gap:.75rem">
+              <div class="img-preview-wrap" id="preview-cl-${i}" style="width:60px;height:60px;flex-shrink:0">
+                ${logoSrc ? `<img src="${logoSrc}" alt="" style="object-fit:contain" />` : '<div class="img-placeholder" style="font-size:.6rem"><i class="fas fa-building"></i></div>'}
+              </div>
+              <div class="field-group" style="flex:1;margin:0">
+                <label>Nombre del cliente</label>
+                <input type="text" data-path-arr="clientes,${i},name" value="${cl.name || ''}" placeholder="Empresa S.A. de C.V." />
+              </div>
+            </div>
+            <div class="field-group">
+              <label>Logo (URL o subir imagen)</label>
+              <div class="image-controls">
+                <input type="url" data-path-arr="clientes,${i},logo_url" class="url-input" value="${logoSrc}" placeholder="https://…" />
+                <label class="btn-upload-label">
+                  <i class="fas fa-upload"></i>
+                  <input type="file" accept="image/jpeg,image/png,image/webp" data-upload-arr="clientes,${i},logo_url" data-preview-id="preview-cl-${i}" />
+                </label>
+              </div>
+            </div>`;
+          grid.appendChild(card);
+          bindArrInputs(card);
+          bindArrFileInputs(card);
+        });
+      }
+
+      /* ── Bind array-path inputs ───────────── */
+      function bindArrInputs(container) {
+        container.querySelectorAll('[data-path-arr]').forEach(el => {
+          el.addEventListener('input', () => {
+            const [section, idx, ...rest] = el.dataset.pathArr.split(',');
+            const key = rest.join(',');
+            if (!Array.isArray(CONTENT[section])) CONTENT[section] = [];
+            if (!CONTENT[section][idx]) CONTENT[section][idx] = {};
+            setPath(CONTENT[section][idx], key, el.value);
+            // update preview if url-type
+            const previewId = 'preview-' + section + '-' + idx + '-' + key.replace('_url', '').replace(/_/g, '-');
+            updateArrPreview(el, el.value);
+          });
+        });
+      }
+
+      function updateArrPreview(inputEl, url) {
+        // look for sibling preview wrap
+        const imageField = inputEl.closest('.image-field');
+        if (!imageField) return;
+        const wrap = imageField.querySelector('.img-preview-wrap');
+        if (!wrap) return;
+        if (url) {
+          wrap.innerHTML = `<img src="${url}" alt="Preview" onerror="this.parentNode.innerHTML='<div class=\\"img-placeholder\\"><i class=\\"fas fa-exclamation-circle\\"></i></div>'" />`;
+        } else {
+          wrap.innerHTML = '<div class="img-placeholder"><i class="fas fa-image"></i></div>';
+        }
+      }
+
+      function bindArrFileInputs(container) {
+        container.querySelectorAll('[data-upload-arr]').forEach(el => {
+          el.addEventListener('change', async () => {
+            if (!el.files[0]) return;
+            const [section, idx, ...rest] = el.dataset.uploadArr.split(',');
+            const key = rest.join(',');
+            const previewId = el.dataset.previewId;
+            const previewWrap = previewId ? document.getElementById(previewId) : el.closest('.image-field') && el.closest('.image-field').querySelector('.img-preview-wrap');
+            if (previewWrap) previewWrap.innerHTML = '<div class="img-placeholder"><i class="fas fa-spinner fa-spin"></i>Subiendo…</div>';
+
+            const fd = new FormData();
+            fd.append('file', el.files[0]);
+            el.value = '';
+
+            try {
+              const r = await fetch(API.upload, { method: 'POST', headers: { 'Authorization': 'Bearer ' + TOKEN }, body: fd });
+              if (r.status === 401) { logout(); return; }
+              const data = await r.json();
+              if (!r.ok) throw new Error(data.error);
+
+              if (!Array.isArray(CONTENT[section])) CONTENT[section] = [];
+              if (!CONTENT[section][idx]) CONTENT[section][idx] = {};
+              setPath(CONTENT[section][idx], key, data.url);
+
+              // update URL input
+              const urlInput = container.querySelector(`[data-path-arr="${section},${idx},${key}"]`);
+              if (urlInput) urlInput.value = data.url;
+
+              if (previewWrap) previewWrap.innerHTML = `<img src="${data.url}" alt="" />`;
+              showToast('Imagen subida correctamente ✓');
+            } catch (err) {
+              showToast('Error: ' + err.message, 'error');
+              if (previewWrap) previewWrap.innerHTML = '<div class="img-placeholder"><i class="fas fa-exclamation-circle"></i></div>';
+            }
+          });
+        });
+      }
+
+      function bindAccordionInputs(container) {
+        bindArrInputs(container);
+        bindArrFileInputs(container);
+        // Accordion toggle
+        container.querySelectorAll('.accordion-header').forEach(header => {
+          header.addEventListener('click', () => {
+            const isOpen = header.classList.contains('open');
+            container.querySelectorAll('.accordion-header').forEach(h => {
+              h.classList.remove('open');
+              const body = h.nextElementSibling;
+              if (body) body.classList.remove('open');
+            });
+            if (!isOpen) {
+              header.classList.add('open');
+              const body = header.nextElementSibling;
+              if (body) body.classList.add('open');
+            }
+          });
+        });
+      }
+
+      /* ═══════════════════════════════════════
+         SIDEBAR NAVIGATION
+      ══════════════════════════════════════ */
+      document.getElementById('sidebarNav').querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+          e.preventDefault();
+          document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+          item.classList.add('active');
+          const target = document.getElementById(item.dataset.target);
+          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          // Close mobile sidebar
+          if (window.innerWidth <= 900) document.getElementById('sidebar').classList.remove('open');
+        });
+      });
+
+      // Mobile sidebar toggle
+      document.getElementById('sidebarToggle').addEventListener('click', () => {
+        document.getElementById('sidebar').classList.toggle('open');
+      });
+
+      /* ── Active nav on scroll ─────────────── */
+      const allSections = document.querySelectorAll('.editor-section');
+      window.addEventListener('scroll', () => {
+        let active = null;
+        allSections.forEach(sec => {
+          if (window.scrollY >= sec.offsetTop - 200) active = sec.id;
+        });
+        if (active) {
+          document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.toggle('active', item.dataset.target === active);
+          });
+        }
+      }, { passive: true });
+
+      /* ═══════════════════════════════════════
+         EVENT BINDINGS
+      ══════════════════════════════════════ */
+
+      // Login
+      document.getElementById('loginBtn').addEventListener('click', doLogin);
+      document.getElementById('passwordInput').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+      document.getElementById('pwToggle').addEventListener('click', () => {
+        const inp = document.getElementById('passwordInput');
+        const icon = document.querySelector('#pwToggle i');
+        if (inp.type === 'password') {
+          inp.type = 'text';
+          icon.className = 'fas fa-eye-slash';
+        } else {
+          inp.type = 'password';
+          icon.className = 'fas fa-eye';
+        }
+      });
+
+      // Save & Logout
+      document.getElementById('saveBtn').addEventListener('click', saveContent);
+      document.getElementById('logoutBtn').addEventListener('click', logout);
+
+      // Add capacidades item
+      document.getElementById('addCapItem').addEventListener('click', () => {
+        if (!CONTENT.capacidades) CONTENT.capacidades = {};
+        if (!Array.isArray(CONTENT.capacidades.items)) CONTENT.capacidades.items = [];
+        CONTENT.capacidades.items.push('');
+        buildCapacidadesList();
+      });
+
+      // Bind simple data-path inputs (Hero, Nosotros, Contacto, Footer)
+      document.querySelectorAll('[data-path]').forEach(bindInput);
+      document.querySelectorAll('[data-upload-for]').forEach(bindFileInput);
+
+      /* ═══════════════════════════════════════
+         INIT
+      ══════════════════════════════════════ */
+      if (checkAuth()) {
+        showAdmin();
+        loadContent();
+      } else {
+        showLogin();
+      }
+    </script>
+
+  </body>
+</html>

@@ -1,0 +1,157 @@
+{
+  "_version": 1,
+  "_updated": "2026-03-28T00:00:00.000Z",
+  "hero": {
+    "badge": "Manufactura CNC de Precisión",
+    "headline_line1": "Precisión que",
+    "headline_accent": "Impulsa",
+    "headline_line3": "la Industria",
+    "subheading": "Diseño y fabricación CNC a la medida de tu proyecto. Desde una sola pieza hasta series de producción — con calidad certificada y tiempos de entrega garantizados en Monterrey, N.L.",
+    "cta_primary": "Solicitar Cotización",
+    "cta_secondary": "Ver Servicios",
+    "bg_image_url": "https://images.unsplash.com/photo-1565087940892-f8e8b9c2c7f1?w=1920&q=80&auto=format&fit=crop"
+  },
+  "nosotros": {
+    "label": "Quiénes Somos",
+    "headline_main": "Ingeniería y precisión",
+    "headline_accent": "en cada pieza",
+    "badge_strong": "Desde 1 Pieza",
+    "badge_span": "Sin mínimos de producción",
+    "desc1": "En Maquinados Jaco somos un equipo de ingenieros y maquinistas especializados en la fabricación de componentes de alta precisión. Atendemos desde proyectos de pieza única hasta corridas de producción, siempre con los mismos estándares de calidad que nos distinguen en la industria de Monterrey y el norte de México.",
+    "desc2": "Combinamos tecnología CNC de última generación con el conocimiento técnico de nuestro equipo para entregar piezas con tolerancias ajustadas, superficies de calidad y dentro de los tiempos acordados con cada cliente.",
+    "mision": "Proveer soluciones de manufactura CNC de alta precisión que superen las expectativas de nuestros clientes, con responsabilidad, eficiencia y calidad en cada proceso.",
+    "vision": "Ser el proveedor de referencia en manufactura de precisión para la industria del norte de México, reconocidos por innovación y confiabilidad técnica.",
+    "image_url": "https://images.unsplash.com/photo-1581092160607-ee22731c9a4c?w=800&q=80&auto=format&fit=crop"
+  },
+  "servicios": [
+    {
+      "front_icon": "fas fa-cog",
+      "front_title": "Fabricación de Piezas Maquinadas en CNC",
+      "front_image_url": "https://images.unsplash.com/photo-1565087940892-f8e8b9c2c7f1?w=600&q=75&auto=format&fit=crop",
+      "back_tag": "Servicio Principal",
+      "back_title": "Fabricación CNC de Alta Precisión",
+      "back_desc": "Producimos piezas maquinadas en centros de torneado y fresado CNC con tolerancias de hasta ±0.005 mm. Trabajamos aluminio, acero inoxidable, acero carbono, bronce, latón y plásticos técnicos. Desde una sola pieza sin necesidad de órdenes mínimas.",
+      "back_image_url": "https://images.unsplash.com/photo-1565087940892-f8e8b9c2c7f1?w=600&q=60&auto=format&fit=crop"
+    },
+    {
+      "front_icon": "fas fa-bolt",
+      "front_title": "Erosionado en Hilo y Penetración",
+      "front_image_url": "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=600&q=75&auto=format&fit=crop",
+      "back_tag": "Electroerosión EDM",
+      "back_title": "Erosionado en Hilo y Penetración",
+      "back_desc": "Mediante electroerosión por hilo (Wire EDM) y por penetración (Sinker EDM) fabricamos geometrías complejas en materiales endurecidos que no pueden ser maquinados convencionalmente. Ideal para moldes, troqueles, punzones e insertos.",
+      "back_image_url": "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=600&q=60&auto=format&fit=crop"
+    },
+    {
+      "front_icon": "fas fa-fire",
+      "front_title": "Fabricación y Soldadura",
+      "front_image_url": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=75&auto=format&fit=crop",
+      "back_tag": "Metalurgia & Unión",
+      "back_title": "Fabricación y Soldadura Industrial",
+      "back_desc": "Ofrecemos servicios de soldadura TIG, MIG/MAG y por punto para estructuras metálicas, subensambles y componentes industriales. Nuestro equipo garantiza cordones de alta resistencia y acabados limpios, integrando el maquinado post-soldadura cuando se requiere.",
+      "back_image_url": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=60&auto=format&fit=crop"
+    },
+    {
+      "front_icon": "fas fa-robot",
+      "front_title": "Automatización e Integración de Procesos",
+      "front_image_url": "https://images.unsplash.com/photo-1565514020179-026b92b2d70b?w=600&q=75&auto=format&fit=crop",
+      "back_tag": "Industria 4.0",
+      "back_title": "Automatización e Integración Industrial",
+      "back_desc": "Diseñamos e integramos sistemas de automatización para líneas de producción: celdas de manufactura, fixtures inteligentes, sistemas de alimentación automática y control por PLC. Mejoramos la eficiencia de sus procesos con soluciones a la medida de su planta.",
+      "back_image_url": "https://images.unsplash.com/photo-1565514020179-026b92b2d70b?w=600&q=60&auto=format&fit=crop"
+    }
+  ],
+  "industrias": [
+    {
+      "icon": "fas fa-car",
+      "name": "Automotriz",
+      "desc": "Componentes de alta tolerancia para líneas de ensamble y sistemas de transmisión.",
+      "image_url": "https://images.unsplash.com/photo-1617469767053-d3b523a0b982?w=800&q=75&auto=format&fit=crop"
+    },
+    {
+      "icon": "fas fa-oil-can",
+      "name": "Petrolera",
+      "desc": "Piezas y válvulas resistentes a entornos de alta presión y temperatura para el sector Oil & Gas.",
+      "image_url": "https://images.unsplash.com/photo-1518709766631-a6a7f45921c3?w=800&q=75&auto=format&fit=crop"
+    },
+    {
+      "icon": "fas fa-bolt",
+      "name": "Eléctrica",
+      "desc": "Gabinetes, soportes y componentes estructurales para infraestructura eléctrica y subestaciones.",
+      "image_url": "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&q=75&auto=format&fit=crop"
+    },
+    {
+      "icon": "fas fa-industry",
+      "name": "Alimenticia",
+      "desc": "Piezas en acero sanitario (AISI 316L) para equipos de procesamiento de alimentos con normativas FDA.",
+      "image_url": "https://images.unsplash.com/photo-1582580894907-d8a4befd38b2?w=800&q=75&auto=format&fit=crop"
+    }
+  ],
+  "capacidades": {
+    "items": [
+      "Centro de maquinado vertical CNC (3 y 4 ejes) — Capacidad hasta 1000 × 600 × 600 mm",
+      "Torno CNC de alta velocidad — Diámetros hasta ∅500 mm, longitud hasta 1000 mm",
+      "Fresadora CNC 5 ejes — Mecanizado de geometrías complejas en una sola sujeción",
+      "Electroerosionadora por hilo (Wire EDM) — Corte de alta precisión en materiales endurecidos",
+      "Electroerosionadora por penetración (Sinker EDM) — Cavidades y moldes de alta complejidad",
+      "Rectificadora cilíndrica y de superficie — Acabados Ra ≤ 0.4 µm",
+      "Equipo de soldadura TIG, MIG/MAG — Acero, inoxidable y aluminio",
+      "Máquina de medición por coordenadas (CMM) — Verificación dimensional certificada"
+    ],
+    "quote": "Listos para trabajar cualquier orden, de cualquier cliente, en cualquier material — con tiempos de respuesta competitivos y calidad documentada.",
+    "image_url": "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&q=80&auto=format&fit=crop"
+  },
+  "galeria": [
+    {
+      "caption": "Piezas de Precisión CNC",
+      "thumb_url": "https://images.unsplash.com/photo-1565087940892-f8e8b9c2c7f1?w=700&q=75&auto=format&fit=crop",
+      "lightbox_url": "https://images.unsplash.com/photo-1565087940892-f8e8b9c2c7f1?w=1200&q=90"
+    },
+    {
+      "caption": "Erosionado EDM",
+      "thumb_url": "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=500&q=75&auto=format&fit=crop",
+      "lightbox_url": "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1200&q=90"
+    },
+    {
+      "caption": "Centro de Maquinado",
+      "thumb_url": "https://images.unsplash.com/photo-1581092160607-ee22731c9a4c?w=500&q=75&auto=format&fit=crop",
+      "lightbox_url": "https://images.unsplash.com/photo-1581092160607-ee22731c9a4c?w=1200&q=90"
+    },
+    {
+      "caption": "Soldadura Industrial TIG",
+      "thumb_url": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=500&q=75&auto=format&fit=crop",
+      "lightbox_url": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&q=90"
+    },
+    {
+      "caption": "Automatización de Procesos",
+      "thumb_url": "https://images.unsplash.com/photo-1565514020179-026b92b2d70b?w=500&q=75&auto=format&fit=crop",
+      "lightbox_url": "https://images.unsplash.com/photo-1565514020179-026b92b2d70b?w=1200&q=90"
+    }
+  ],
+  "clientes": [
+    { "name": "Cliente 1", "logo_url": "" },
+    { "name": "Cliente 2", "logo_url": "" },
+    { "name": "Cliente 3", "logo_url": "" },
+    { "name": "Cliente 4", "logo_url": "" },
+    { "name": "Cliente 5", "logo_url": "" }
+  ],
+  "contacto": {
+    "phone_display": "811 488 3334",
+    "phone_href": "tel:8114883334",
+    "email": "contacto@maquinadosjaco.com",
+    "address_line1": "Fresno 2112, Moderna",
+    "address_line2": "64530 Monterrey, N.L., México",
+    "hours_weekday": "Lun – Vie: 8:00 a.m. – 6:00 p.m.",
+    "hours_saturday": "Sáb: 9:00 a.m. – 1:00 p.m.",
+    "whatsapp_href": "https://wa.me/528114883334?text=Quiero%20una%20cotizaci%C3%B3n",
+    "maps_embed_src": "https://maps.google.com/maps?q=Fresno+2112,+Moderna,+Monterrey,+Nuevo+León,+México&t=&z=15&ie=UTF8&iwloc=&output=embed"
+  },
+  "footer": {
+    "tagline": "Diseño y manufactura CNC de precisión en Monterrey, N.L. Fabricamos desde una sola pieza, sin mínimos de producción, con calidad y tiempos de entrega garantizados.",
+    "copyright": "© 2026 Maquinados Jaco. Todos los derechos reservados.",
+    "designer": "Diseñado por Mario Vidaña",
+    "social_facebook": "#",
+    "social_instagram": "#",
+    "social_linkedin": "#"
+  }
+}

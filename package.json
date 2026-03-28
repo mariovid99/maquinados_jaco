@@ -1,0 +1,10 @@
+{
+  "name": "maquinados-jaco-cms",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.600.0",
+    "busboy": "^1.6.0",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

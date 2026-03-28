@@ -1,0 +1,2756 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Maquinados Jaco – Diseño y manufactura CNC de precisión en Monterrey, N.L. Fabricación de piezas desde una unidad, erosionado en hilo, soldadura y automatización industrial."
+    />
+    <title>Maquinados Jaco | Manufactura CNC de Precisión</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Barlow+Condensed:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <style>
+      /* ===================================================
+       DESIGN TOKENS
+    =================================================== */
+      :root {
+        --red: #df040a;
+        --blue: #012a84;
+        --gray: #a2a2a0;
+        --dark: #444041;
+        --black: #0d0d0d;
+        --white: #ffffff;
+        --off-white: #f4f4f2;
+        --surface: #111316;
+        --card-bg: #1a1d22;
+        --radius: 8px;
+        --radius-lg: 16px;
+        --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+        --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        --font-main: "Inter", sans-serif;
+        --font-display: "Barlow Condensed", sans-serif;
+      }
+
+      /* ===================================================
+       RESET & BASE
+    =================================================== */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+        font-size: 16px;
+      }
+      body {
+        font-family: var(--font-main);
+        background: var(--black);
+        color: var(--white);
+        line-height: 1.65;
+        overflow-x: hidden;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      img {
+        display: block;
+        width: 100%;
+        object-fit: cover;
+      }
+      ul {
+        list-style: none;
+      }
+      section {
+        position: relative;
+      }
+
+      /* ===================================================
+       SCROLL ANIMATIONS
+    =================================================== */
+      .reveal {
+        opacity: 0;
+        transform: translateY(40px);
+        transition:
+          opacity 0.7s ease,
+          transform 0.7s ease;
+      }
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .reveal-left {
+        opacity: 0;
+        transform: translateX(-50px);
+        transition:
+          opacity 0.7s ease,
+          transform 0.7s ease;
+      }
+      .reveal-left.visible {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      .reveal-right {
+        opacity: 0;
+        transform: translateX(50px);
+        transition:
+          opacity 0.7s ease,
+          transform 0.7s ease;
+      }
+      .reveal-right.visible {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      /* ===================================================
+       UTILITIES
+    =================================================== */
+      .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .section-label {
+        font-family: var(--font-display);
+        font-size: 0.75rem;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: var(--red);
+        font-weight: 600;
+        display: inline-block;
+        margin-bottom: 0.5rem;
+      }
+      .section-title {
+        font-family: var(--font-display);
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 800;
+        line-height: 1.1;
+        letter-spacing: -0.01em;
+        color: var(--white);
+      }
+      .section-title span {
+        color: var(--red);
+      }
+      .section-desc {
+        color: var(--gray);
+        max-width: 600px;
+        font-size: 0.95rem;
+        line-height: 1.75;
+        margin-top: 0.75rem;
+      }
+      .divider {
+        width: 50px;
+        height: 3px;
+        background: var(--red);
+        margin: 1rem 0;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.85rem 2rem;
+        border-radius: var(--radius);
+        font-weight: 600;
+        font-size: 0.9rem;
+        letter-spacing: 0.04em;
+        cursor: pointer;
+        transition: var(--transition);
+        border: 2px solid transparent;
+      }
+      .btn-primary {
+        background: var(--red);
+        color: var(--white);
+        border-color: var(--red);
+      }
+      .btn-primary:hover {
+        background: transparent;
+        color: var(--red);
+      }
+      .btn-outline {
+        background: transparent;
+        color: var(--white);
+        border-color: rgba(255, 255, 255, 0.4);
+      }
+      .btn-outline:hover {
+        border-color: var(--white);
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      /* ===================================================
+       HEADER / NAV
+    =================================================== */
+      #header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        padding: 1.1rem 0;
+        transition:
+          background var(--transition),
+          box-shadow var(--transition);
+      }
+      #header.scrolled {
+        background: rgba(10, 10, 12, 0.95);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+      }
+      .nav-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .logo-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--red);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-display);
+        font-weight: 800;
+        font-size: 1.1rem;
+        color: var(--white);
+        letter-spacing: -0.03em;
+        flex-shrink: 0;
+      }
+      .logo-text {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.1;
+      }
+      .logo-text strong {
+        font-family: var(--font-display);
+        font-weight: 800;
+        font-size: 1.1rem;
+        letter-spacing: 0.02em;
+        color: var(--white);
+      }
+      .logo-text span {
+        font-size: 0.65rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--gray);
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+      }
+      .nav-links a {
+        padding: 0.45rem 0.85rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.75);
+        border-radius: 6px;
+        transition: var(--transition);
+        letter-spacing: 0.03em;
+      }
+      .nav-links a:hover {
+        color: var(--white);
+        background: rgba(255, 255, 255, 0.07);
+      }
+      .nav-cta {
+        background: var(--red) !important;
+        color: var(--white) !important;
+        padding: 0.45rem 1.1rem !important;
+        font-weight: 600 !important;
+      }
+      .nav-cta:hover {
+        background: #b80308 !important;
+      }
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        gap: 5px;
+        cursor: pointer;
+        padding: 4px;
+      }
+      .hamburger span {
+        display: block;
+        width: 24px;
+        height: 2px;
+        background: var(--white);
+        border-radius: 2px;
+        transition: var(--transition);
+      }
+      .mobile-menu {
+        display: none;
+        flex-direction: column;
+        background: rgba(10, 10, 12, 0.97);
+        padding: 1rem 0 1.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .mobile-menu a {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.8);
+        display: block;
+        transition: var(--transition);
+      }
+      .mobile-menu a:hover {
+        color: var(--red);
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      /* ===================================================
+       HERO
+    =================================================== */
+      #hero {
+        height: 100vh;
+        min-height: 680px;
+        display: flex;
+        align-items: center;
+        background:
+          linear-gradient(
+            135deg,
+            rgba(1, 42, 132, 0.7) 0%,
+            rgba(13, 13, 13, 0.85) 50%,
+            rgba(223, 4, 10, 0.25) 100%
+          ),
+          url("https://images.unsplash.com/photo-1565087940892-f8e8b9c2c7f1?w=1920&q=80&auto=format&fit=crop")
+            center/cover no-repeat;
+        overflow: hidden;
+      }
+      .hero-content {
+        max-width: 760px;
+        padding-top: 6rem;
+      }
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(223, 4, 10, 0.15);
+        border: 1px solid rgba(223, 4, 10, 0.4);
+        border-radius: 100px;
+        padding: 0.35rem 1rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #ff6b6e;
+        margin-bottom: 1.5rem;
+      }
+      .hero-badge::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--red);
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.5;
+          transform: scale(1.5);
+        }
+      }
+      .hero-title {
+        font-family: var(--font-display);
+        font-size: clamp(2.8rem, 7vw, 5.5rem);
+        font-weight: 900;
+        line-height: 1;
+        letter-spacing: -0.02em;
+        margin-bottom: 1.5rem;
+      }
+      .hero-title .accent {
+        color: var(--red);
+      }
+      .hero-title .line-blue {
+        color: #4d7fff;
+      }
+      .hero-sub {
+        font-size: clamp(0.95rem, 2vw, 1.15rem);
+        color: rgba(255, 255, 255, 0.75);
+        max-width: 580px;
+        line-height: 1.75;
+        margin-bottom: 2.25rem;
+      }
+      .hero-actions {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      .hero-scroll {
+        position: absolute;
+        bottom: 2.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 0.7rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        animation: scrollBounce 2.5s infinite;
+      }
+      .hero-scroll i {
+        font-size: 0.85rem;
+      }
+      @keyframes scrollBounce {
+        0%,
+        100% {
+          transform: translateX(-50%) translateY(0);
+        }
+        50% {
+          transform: translateX(-50%) translateY(8px);
+        }
+      }
+      /* Noise texture overlay */
+      #hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+        pointer-events: none;
+      }
+
+      /* ===================================================
+       ABOUT / NOSOTROS
+    =================================================== */
+      #nosotros {
+        padding: 7rem 0;
+        background: var(--black);
+      }
+      .about-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 5rem;
+        align-items: center;
+      }
+      .about-img {
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        position: relative;
+        aspect-ratio: 4/3;
+      }
+      .about-img img {
+        height: 100%;
+        transition: transform 0.6s ease;
+      }
+      .about-img:hover img {
+        transform: scale(1.04);
+      }
+      .about-img::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(223, 4, 10, 0.25) 0%,
+          transparent 60%
+        );
+        z-index: 1;
+        pointer-events: none;
+      }
+      .about-img-badge {
+        position: absolute;
+        bottom: 1.5rem;
+        left: 1.5rem;
+        z-index: 2;
+        background: var(--blue);
+        border-radius: var(--radius);
+        padding: 0.75rem 1.25rem;
+      }
+      .about-img-badge strong {
+        font-family: var(--font-display);
+        font-size: 1.5rem;
+        font-weight: 800;
+        display: block;
+        line-height: 1;
+      }
+      .about-img-badge span {
+        font-size: 0.72rem;
+        color: rgba(255, 255, 255, 0.7);
+        letter-spacing: 0.05em;
+      }
+      .mv-cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-top: 2.5rem;
+      }
+      .mv-card {
+        background: var(--card-bg);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        transition: var(--transition);
+      }
+      .mv-card:hover {
+        border-color: rgba(223, 4, 10, 0.3);
+        transform: translateY(-3px);
+      }
+      .mv-card-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: rgba(223, 4, 10, 0.12);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--red);
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+      }
+      .mv-card h4 {
+        font-family: var(--font-display);
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--white);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        margin-bottom: 0.4rem;
+      }
+      .mv-card p {
+        font-size: 0.82rem;
+        color: var(--gray);
+        line-height: 1.65;
+      }
+
+      /* ===================================================
+       SERVICIOS (FLIP CARDS)
+    =================================================== */
+      #servicios {
+        padding: 7rem 0;
+        background: var(--surface);
+      }
+      .services-header {
+        text-align: center;
+        margin-bottom: 4rem;
+      }
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+        gap: 1.75rem;
+      }
+      .flip-card {
+        height: 360px;
+        perspective: 1200px;
+        cursor: pointer;
+      }
+      .flip-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: var(--radius-lg);
+      }
+      .flip-card.flipped .flip-inner {
+        transform: rotateY(180deg);
+      }
+      .flip-front,
+      .flip-back {
+        position: absolute;
+        inset: 0;
+        backface-visibility: hidden;
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+      }
+      .flip-front {
+        background: var(--card-bg);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      .flip-front img {
+        width: 100%;
+        height: 62%;
+        object-fit: cover;
+        filter: brightness(0.75) saturate(1.1);
+        transition: filter 0.4s;
+      }
+      .flip-card:hover .flip-front img {
+        filter: brightness(0.85) saturate(1.2);
+      }
+      .flip-front-body {
+        padding: 1.25rem 1.5rem;
+      }
+      .flip-service-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        background: var(--red);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        color: var(--white);
+        margin-bottom: 0.6rem;
+      }
+      .flip-front h3 {
+        font-family: var(--font-display);
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--white);
+        line-height: 1.25;
+      }
+      .flip-hint {
+        position: absolute;
+        bottom: 0.9rem;
+        right: 1.1rem;
+        font-size: 0.68rem;
+        color: rgba(255, 255, 255, 0.35);
+        letter-spacing: 0.08em;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+      }
+      .flip-hint i {
+        font-size: 0.6rem;
+      }
+      .flip-back {
+        transform: rotateY(180deg);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        background: var(--blue);
+        border: 1px solid rgba(1, 42, 132, 0.6);
+      }
+      .flip-back-img {
+        position: absolute;
+        inset: 0;
+      }
+      .flip-back-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: brightness(0.35) saturate(0.8);
+      }
+      .flip-back-content {
+        position: relative;
+        z-index: 2;
+        padding: 1.75rem;
+        background: linear-gradient(
+          to top,
+          rgba(1, 42, 132, 0.97) 0%,
+          rgba(1, 42, 132, 0.6) 70%,
+          transparent 100%
+        );
+      }
+      .flip-back .tag {
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.55);
+        margin-bottom: 0.5rem;
+      }
+      .flip-back h3 {
+        font-family: var(--font-display);
+        font-weight: 800;
+        font-size: 1.15rem;
+        color: var(--white);
+        margin-bottom: 0.75rem;
+        line-height: 1.2;
+      }
+      .flip-back p {
+        font-size: 0.82rem;
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.65;
+      }
+      .flip-close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        z-index: 3;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        color: var(--white);
+        transition: background 0.2s;
+      }
+      .flip-close:hover {
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      /* ===================================================
+       INDUSTRIAS
+    =================================================== */
+      #industrias {
+        padding: 7rem 0;
+        background: var(--black);
+      }
+      .industries-flex {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+        margin-top: 3.5rem;
+      }
+      .industry-card {
+        position: relative;
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        aspect-ratio: 16/9;
+        cursor: default;
+      }
+      .industry-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: brightness(0.45) saturate(0.9);
+        transition:
+          filter 0.5s ease,
+          transform 0.6s ease;
+      }
+      .industry-card:hover img {
+        filter: brightness(0.6) saturate(1.1);
+        transform: scale(1.05);
+      }
+      .industry-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to top,
+          rgba(1, 42, 132, 0.85) 0%,
+          transparent 60%
+        );
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 1.75rem;
+      }
+      .industry-icon {
+        width: 40px;
+        height: 40px;
+        background: rgba(223, 4, 10, 0.85);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        color: var(--white);
+        margin-bottom: 0.75rem;
+        transition: transform 0.3s;
+      }
+      .industry-card:hover .industry-icon {
+        transform: scale(1.1);
+      }
+      .industry-overlay h3 {
+        font-family: var(--font-display);
+        font-weight: 800;
+        font-size: 1.4rem;
+        color: var(--white);
+        margin-bottom: 0.3rem;
+      }
+      .industry-overlay p {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      /* ===================================================
+       CAPACIDADES
+    =================================================== */
+      #capacidades {
+        padding: 7rem 0;
+        background: var(--surface);
+      }
+      .capacidades-grid {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: 5rem;
+        align-items: center;
+        margin-top: 3.5rem;
+      }
+      .cap-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+      }
+      .cap-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        background: var(--card-bg);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: var(--radius);
+        padding: 1rem 1.25rem;
+        transition: var(--transition);
+      }
+      .cap-item:hover {
+        border-color: rgba(223, 4, 10, 0.3);
+        transform: translateX(6px);
+      }
+      .cap-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--red);
+        flex-shrink: 0;
+      }
+      .cap-item p {
+        font-size: 0.88rem;
+        color: rgba(255, 255, 255, 0.85);
+        font-weight: 500;
+        line-height: 1.3;
+      }
+      .cap-img {
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        aspect-ratio: 4/3;
+        position: relative;
+      }
+      .cap-img img {
+        height: 100%;
+        transition: transform 0.6s ease;
+      }
+      .cap-img:hover img {
+        transform: scale(1.04);
+      }
+      .cap-img::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border: 2px solid rgba(223, 4, 10, 0.3);
+        border-radius: var(--radius-lg);
+        pointer-events: none;
+      }
+      .cap-note {
+        margin-top: 1.5rem;
+        padding: 1rem 1.5rem;
+        border-left: 3px solid var(--red);
+        background: rgba(223, 4, 10, 0.05);
+        border-radius: 0 var(--radius) var(--radius) 0;
+      }
+      .cap-note p {
+        font-size: 0.85rem;
+        color: var(--gray);
+        font-style: italic;
+      }
+
+      /* ===================================================
+       GALERÍA
+    =================================================== */
+      #galeria {
+        padding: 7rem 0;
+        background: var(--black);
+      }
+      .gallery-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 2.5rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, 240px);
+        gap: 1rem;
+      }
+      .gallery-item {
+        border-radius: var(--radius);
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+      }
+      .gallery-item:first-child {
+        grid-row: 1 / 3;
+      }
+      .gallery-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition:
+          transform 0.5s ease,
+          filter 0.4s ease;
+        filter: brightness(0.8) saturate(1.1);
+      }
+      .gallery-item:hover img {
+        transform: scale(1.07);
+        filter: brightness(1) saturate(1.2);
+      }
+      .gallery-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to top,
+          rgba(1, 42, 132, 0.8) 0%,
+          transparent 60%
+        );
+        opacity: 0;
+        transition: opacity 0.4s;
+        display: flex;
+        align-items: flex-end;
+        padding: 1.25rem;
+      }
+      .gallery-item:hover .gallery-overlay {
+        opacity: 1;
+      }
+      .gallery-overlay span {
+        font-family: var(--font-display);
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--white);
+        letter-spacing: 0.04em;
+      }
+
+      /* Lightbox */
+      .lightbox {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.92);
+        z-index: 2000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+      }
+      .lightbox.active {
+        display: flex;
+      }
+      .lightbox img {
+        max-width: 90vw;
+        max-height: 85vh;
+        width: auto;
+        height: auto;
+        border-radius: var(--radius);
+        object-fit: contain;
+      }
+      .lightbox-close {
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+        color: var(--white);
+        font-size: 1.5rem;
+        cursor: pointer;
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        transition: background 0.2s;
+      }
+      .lightbox-close:hover {
+        background: var(--red);
+      }
+
+      /* ===================================================
+       CLIENTES CAROUSEL
+    =================================================== */
+      #clientes {
+        padding: 5rem 0;
+        background: var(--surface);
+        overflow: hidden;
+      }
+      .clients-header {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+      .carousel-track-wrapper {
+        overflow: hidden;
+        -webkit-mask-image: linear-gradient(
+          to right,
+          transparent 0%,
+          black 10%,
+          black 90%,
+          transparent 100%
+        );
+        mask-image: linear-gradient(
+          to right,
+          transparent 0%,
+          black 10%,
+          black 90%,
+          transparent 100%
+        );
+      }
+      .carousel-track {
+        display: flex;
+        gap: 2rem;
+        width: max-content;
+        animation: scrollClients 28s linear infinite;
+      }
+      .carousel-track:hover {
+        animation-play-state: paused;
+      }
+      @keyframes scrollClients {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-50%);
+        }
+      }
+      .client-card {
+        flex-shrink: 0;
+        width: 220px;
+        height: 100px;
+        background: var(--card-bg);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: var(--radius);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        padding: 1.25rem;
+        transition: var(--transition);
+        cursor: default;
+      }
+      .client-card:hover {
+        border-color: rgba(1, 42, 132, 0.5);
+        background: rgba(1, 42, 132, 0.12);
+        transform: translateY(-3px);
+      }
+      .client-card i {
+        font-size: 1.4rem;
+        color: var(--gray);
+        transition: color 0.3s;
+      }
+      .client-card:hover i {
+        color: var(--red);
+      }
+      .client-card span {
+        font-family: var(--font-display);
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.7);
+        letter-spacing: 0.03em;
+        text-align: center;
+      }
+
+      /* ===================================================
+       CONTACTO
+    =================================================== */
+      #contacto {
+        padding: 7rem 0;
+        background: var(--black);
+      }
+      .contact-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        margin-top: 3.5rem;
+      }
+      .contact-info {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      .contact-item {
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+      .contact-icon {
+        width: 46px;
+        height: 46px;
+        flex-shrink: 0;
+        border-radius: var(--radius);
+        background: rgba(223, 4, 10, 0.1);
+        border: 1px solid rgba(223, 4, 10, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--red);
+        font-size: 1rem;
+      }
+      .contact-item h4 {
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--gray);
+        margin-bottom: 0.2rem;
+      }
+      .contact-item p,
+      .contact-item a {
+        font-size: 0.9rem;
+        color: var(--white);
+        font-weight: 500;
+      }
+      .contact-item a:hover {
+        color: var(--red);
+      }
+      .contact-form-box {
+        background: var(--card-bg);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: var(--radius-lg);
+        padding: 2.5rem;
+      }
+      .contact-form-box h3 {
+        font-family: var(--font-display);
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: var(--white);
+        margin-bottom: 1.75rem;
+      }
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        margin-bottom: 1rem;
+      }
+      .form-group label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--gray);
+      }
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius);
+        padding: 0.75rem 1rem;
+        font-size: 0.88rem;
+        color: var(--white);
+        font-family: var(--font-main);
+        transition: border-color 0.2s;
+        outline: none;
+      }
+      .form-group input::placeholder,
+      .form-group textarea::placeholder {
+        color: rgba(255, 255, 255, 0.25);
+      }
+      .form-group input:focus,
+      .form-group textarea:focus,
+      .form-group select:focus {
+        border-color: var(--red);
+        background: rgba(223, 4, 10, 0.04);
+      }
+      .form-group textarea {
+        resize: vertical;
+        min-height: 110px;
+      }
+      .form-group select option {
+        background: var(--surface);
+      }
+      .map-container {
+        margin-top: 2.5rem;
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.07);
+      }
+      .map-container iframe {
+        width: 100%;
+        height: 300px;
+        border: none;
+        filter: invert(90%) hue-rotate(180deg) saturate(0.85);
+      }
+
+      /* ===================================================
+       FOOTER
+    =================================================== */
+      #footer {
+        background: #080b10;
+        padding: 4.5rem 0 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1.5fr;
+        gap: 3rem;
+        padding-bottom: 3.5rem;
+      }
+      .footer-brand .logo {
+        margin-bottom: 1rem;
+      }
+      .footer-brand p {
+        font-size: 0.82rem;
+        color: rgba(255, 255, 255, 0.45);
+        line-height: 1.75;
+        max-width: 280px;
+      }
+      .footer-socials {
+        display: flex;
+        gap: 0.6rem;
+        margin-top: 1.5rem;
+      }
+      .footer-socials a {
+        width: 36px;
+        height: 36px;
+        border-radius: var(--radius);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.5);
+        transition: var(--transition);
+      }
+      .footer-socials a:hover {
+        color: var(--white);
+        border-color: var(--red);
+        background: var(--red);
+      }
+      .footer-col h4 {
+        font-family: var(--font-display);
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--white);
+        margin-bottom: 1.25rem;
+      }
+      .footer-col ul {
+        display: flex;
+        flex-direction: column;
+        gap: 0.65rem;
+      }
+      .footer-col ul li a {
+        font-size: 0.82rem;
+        color: rgba(255, 255, 255, 0.45);
+        transition: color 0.2s;
+      }
+      .footer-col ul li a:hover {
+        color: var(--red);
+      }
+      .footer-contact-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+      }
+      .footer-contact-list li {
+        display: flex;
+        gap: 0.6rem;
+        align-items: flex-start;
+      }
+      .footer-contact-list li i {
+        color: var(--red);
+        font-size: 0.8rem;
+        margin-top: 0.18rem;
+        flex-shrink: 0;
+      }
+      .footer-contact-list li span {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.5);
+        line-height: 1.55;
+      }
+      .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        padding: 1.25rem 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      .footer-bottom p {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.3);
+      }
+      .footer-bottom span {
+        color: var(--red);
+      }
+
+      /* ===================================================
+       WHATSAPP BUBBLE
+    =================================================== */
+      .wa-bubble {
+        position: fixed;
+        bottom: 1.75rem;
+        right: 1.75rem;
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        cursor: pointer;
+        animation: waBounce 3s ease infinite;
+      }
+      @keyframes waBounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-6px);
+        }
+      }
+      .wa-tooltip {
+        background: var(--white);
+        color: var(--dark);
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 0.55rem 1rem;
+        border-radius: 20px;
+        box-shadow: var(--shadow);
+        white-space: nowrap;
+        pointer-events: none;
+        opacity: 0;
+        transform: translateX(10px);
+        transition:
+          opacity 0.3s,
+          transform 0.3s;
+      }
+      .wa-bubble:hover .wa-tooltip {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      .wa-btn {
+        width: 58px;
+        height: 58px;
+        border-radius: 50%;
+        background: #25d366;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--white);
+        font-size: 1.6rem;
+        box-shadow: 0 4px 20px rgba(37, 211, 102, 0.45);
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .wa-btn:hover {
+        transform: scale(1.08);
+        box-shadow: 0 6px 28px rgba(37, 211, 102, 0.65);
+      }
+      .wa-pulse {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--red);
+        border: 2px solid #080b10;
+        animation: pulse 2s infinite;
+      }
+
+      /* ===================================================
+       SECTION SEPARATOR
+    =================================================== */
+      .sep {
+        height: 1px;
+        background: linear-gradient(
+          to right,
+          transparent,
+          rgba(255, 255, 255, 0.08),
+          transparent
+        );
+      }
+
+      /* ===================================================
+       RESPONSIVE
+    =================================================== */
+      @media (max-width: 1024px) {
+        .capacidades-grid {
+          grid-template-columns: 1fr;
+          gap: 2.5rem;
+        }
+        .footer-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      @media (max-width: 768px) {
+        .nav-links {
+          display: none;
+        }
+        .hamburger {
+          display: flex;
+        }
+        .about-grid {
+          grid-template-columns: 1fr;
+          gap: 2.5rem;
+        }
+        .mv-cards {
+          grid-template-columns: 1fr;
+        }
+        .industries-flex {
+          grid-template-columns: 1fr;
+        }
+        .gallery-grid {
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: auto;
+        }
+        .gallery-item:first-child {
+          grid-row: auto;
+        }
+        .contact-grid {
+          grid-template-columns: 1fr;
+          gap: 2.5rem;
+        }
+        .footer-grid {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+        }
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+        .hero-actions {
+          flex-direction: column;
+        }
+      }
+      @media (max-width: 480px) {
+        .gallery-grid {
+          grid-template-columns: 1fr;
+        }
+        .services-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- =====================================================
+     HEADER
+====================================================== -->
+    <header id="header">
+      <div class="container">
+        <nav class="nav-inner">
+          <a href="#hero" class="logo">
+            <img
+              src="MaquinadosJaco.png"
+              alt="Maquinados Jaco"
+              style="
+                height: 100px;
+                width: auto;
+                object-fit: contain;
+                display: block;
+              "
+            />
+          </a>
+
+          <ul class="nav-links">
+            <li><a href="#nosotros">Nosotros</a></li>
+            <li><a href="#servicios">Servicios</a></li>
+            <li><a href="#industrias">Industrias</a></li>
+            <li><a href="#capacidades">Capacidades</a></li>
+            <li><a href="#galeria">Galería</a></li>
+            <li><a href="#clientes">Clientes</a></li>
+            <li><a href="#contacto" class="nav-cta">Cotizar</a></li>
+          </ul>
+
+          <div class="hamburger" id="hamburger" aria-label="Menú">
+            <span></span><span></span><span></span>
+          </div>
+        </nav>
+
+        <div class="mobile-menu" id="mobileMenu">
+          <a href="#nosotros" class="mobile-link">Nosotros</a>
+          <a href="#servicios" class="mobile-link">Servicios</a>
+          <a href="#industrias" class="mobile-link">Industrias</a>
+          <a href="#capacidades" class="mobile-link">Capacidades</a>
+          <a href="#galeria" class="mobile-link">Galería</a>
+          <a href="#clientes" class="mobile-link">Clientes</a>
+          <a href="#contacto" class="mobile-link">Cotizar</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- =====================================================
+     HERO
+====================================================== -->
+    <section id="hero">
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-badge" id="heroBadge">Manufactura CNC de Precisión</div>
+          <h1 class="hero-title" id="heroTitle">
+            Precisión que<br />
+            <span class="accent">Impulsa</span><br />
+            la Industria
+          </h1>
+          <p class="hero-sub" id="heroSub">
+            Diseño y fabricación CNC a la medida de tu proyecto. Desde una sola
+            pieza hasta series de producción — con calidad certificada y tiempos
+            de entrega garantizados en Monterrey, N.L.
+          </p>
+          <div class="hero-actions">
+            <a href="#contacto" class="btn btn-primary" id="heroCta1Btn"
+              ><i class="fas fa-paper-plane"></i> <span id="heroCta1">Solicitar Cotización</span></a
+            >
+            <a href="#servicios" class="btn btn-outline" id="heroCta2Btn"
+              ><i class="fas fa-cogs"></i> <span id="heroCta2">Ver Servicios</span></a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+     NOSOTROS
+====================================================== -->
+    <section id="nosotros">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-img reveal-left">
+            <img
+              id="nosotrosImg"
+              src="https://images.unsplash.com/photo-1581092160607-ee22731c9a4c?w=800&q=80&auto=format&fit=crop"
+              alt="Taller de maquinados CNC Jaco"
+              loading="lazy"
+            />
+            <div class="about-img-badge">
+              <strong id="nosotrosBadgeStrong">Desde 1 Pieza</strong>
+              <span id="nosotrosBadgeSpan">Sin mínimos de producción</span>
+            </div>
+          </div>
+
+          <div class="reveal-right">
+            <p class="section-label" id="nosotrosLabel">Quiénes Somos</p>
+            <h2 class="section-title" id="nosotrosTitle">
+              Ingeniería y precisión<br /><span>en cada pieza</span>
+            </h2>
+            <div class="divider"></div>
+            <p class="section-desc" id="nosotrosDesc1">
+              En Maquinados Jaco somos un equipo de ingenieros y maquinistas
+              especializados en la fabricación de componentes de alta precisión.
+              Atendemos desde proyectos de pieza única hasta corridas de
+              producción, siempre con los mismos estándares de calidad que nos
+              distinguen en la industria de Monterrey y el norte de México.
+            </p>
+            <p class="section-desc" id="nosotrosDesc2" style="margin-top: 0.75rem">
+              Combinamos tecnología CNC de última generación con el conocimiento
+              técnico de nuestro equipo para entregar piezas con tolerancias
+              ajustadas, superficies de calidad y dentro de los tiempos
+              acordados con cada cliente.
+            </p>
+
+            <div class="mv-cards">
+              <div class="mv-card">
+                <div class="mv-card-icon"><i class="fas fa-bullseye"></i></div>
+                <h4>Misión</h4>
+                <p id="nosotrosMision">
+                  Proveer soluciones de manufactura CNC de alta precisión que
+                  superen las expectativas de nuestros clientes, con
+                  responsabilidad, eficiencia y calidad en cada proceso.
+                </p>
+              </div>
+              <div class="mv-card">
+                <div class="mv-card-icon"><i class="fas fa-eye"></i></div>
+                <h4>Visión</h4>
+                <p id="nosotrosVision">
+                  Ser el proveedor de referencia en manufactura de precisión
+                  para la industria del norte de México, reconocidos por
+                  innovación y confiabilidad técnica.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="sep"></div>
+
+    <!-- =====================================================
+     SERVICIOS
+====================================================== -->
+    <section id="servicios">
+      <div class="container">
+        <div class="services-header reveal">
+          <p class="section-label">Lo que hacemos</p>
+          <h2 class="section-title">Nuestros <span>Servicios</span></h2>
+          <p class="section-desc" style="margin: 0.75rem auto 0">
+            Haz clic en cada tarjeta para conocer más detalles de cada servicio.
+          </p>
+        </div>
+
+        <div class="services-grid" id="servicesGrid">
+          <!-- Card 1 -->
+          <div class="flip-card reveal" onclick="toggleFlip(this)">
+            <div class="flip-inner">
+              <div class="flip-front">
+                <img
+                  src="https://images.unsplash.com/photo-1565087940892-f8e8b9c2c7f1?w=600&q=75&auto=format&fit=crop"
+                  alt="Maquinado CNC"
+                  loading="lazy"
+                />
+                <div class="flip-front-body">
+                  <div class="flip-service-icon">
+                    <i class="fas fa-cog"></i>
+                  </div>
+                  <h3>Fabricación de Piezas Maquinadas en CNC</h3>
+                </div>
+                <div class="flip-hint">
+                  <i class="fas fa-hand-pointer"></i> Click para más info
+                </div>
+              </div>
+              <div class="flip-back">
+                <div class="flip-back-img">
+                  <img
+                    src="https://images.unsplash.com/photo-1565087940892-f8e8b9c2c7f1?w=600&q=60&auto=format&fit=crop"
+                    alt=""
+                    loading="lazy"
+                  />
+                </div>
+                <div class="flip-close" onclick="closeFlip(event, this)">
+                  <i class="fas fa-times"></i>
+                </div>
+                <div class="flip-back-content">
+                  <div class="tag">Servicio Principal</div>
+                  <h3>Fabricación CNC de Alta Precisión</h3>
+                  <p>
+                    Producimos piezas maquinadas en centros de torneado y
+                    fresado CNC con tolerancias de hasta ±0.005 mm. Trabajamos
+                    aluminio, acero inoxidable, acero carbono, bronce, latón y
+                    plásticos técnicos. Desde una sola pieza sin necesidad de
+                    órdenes mínimas.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div
+            class="flip-card reveal"
+            onclick="toggleFlip(this)"
+            style="transition-delay: 0.1s"
+          >
+            <div class="flip-inner">
+              <div class="flip-front">
+                <img
+                  src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=600&q=75&auto=format&fit=crop"
+                  alt="Erosionado en hilo"
+                  loading="lazy"
+                />
+                <div class="flip-front-body">
+                  <div class="flip-service-icon">
+                    <i class="fas fa-bolt"></i>
+                  </div>
+                  <h3>Erosionado en Hilo y Penetración</h3>
+                </div>
+                <div class="flip-hint">
+                  <i class="fas fa-hand-pointer"></i> Click para más info
+                </div>
+              </div>
+              <div class="flip-back">
+                <div class="flip-back-img">
+                  <img
+                    src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=600&q=60&auto=format&fit=crop"
+                    alt=""
+                    loading="lazy"
+                  />
+                </div>
+                <div class="flip-close" onclick="closeFlip(event, this)">
+                  <i class="fas fa-times"></i>
+                </div>
+                <div class="flip-back-content">
+                  <div class="tag">Electroerosión EDM</div>
+                  <h3>Erosionado en Hilo y Penetración</h3>
+                  <p>
+                    Mediante electroerosión por hilo (Wire EDM) y por
+                    penetración (Sinker EDM) fabricamos geometrías complejas en
+                    materiales endurecidos que no pueden ser maquinados
+                    convencionalmente. Ideal para moldes, troqueles, punzones e
+                    insertos.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div
+            class="flip-card reveal"
+            onclick="toggleFlip(this)"
+            style="transition-delay: 0.2s"
+          >
+            <div class="flip-inner">
+              <div class="flip-front">
+                <img
+                  src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=75&auto=format&fit=crop"
+                  alt="Fabricación y soldadura"
+                  loading="lazy"
+                />
+                <div class="flip-front-body">
+                  <div class="flip-service-icon">
+                    <i class="fas fa-fire"></i>
+                  </div>
+                  <h3>Fabricación y Soldadura</h3>
+                </div>
+                <div class="flip-hint">
+                  <i class="fas fa-hand-pointer"></i> Click para más info
+                </div>
+              </div>
+              <div class="flip-back">
+                <div class="flip-back-img">
+                  <img
+                    src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=60&auto=format&fit=crop"
+                    alt=""
+                    loading="lazy"
+                  />
+                </div>
+                <div class="flip-close" onclick="closeFlip(event, this)">
+                  <i class="fas fa-times"></i>
+                </div>
+                <div class="flip-back-content">
+                  <div class="tag">Metalurgia & Unión</div>
+                  <h3>Fabricación y Soldadura Industrial</h3>
+                  <p>
+                    Ofrecemos servicios de soldadura TIG, MIG/MAG y por punto
+                    para estructuras metálicas, subensambles y componentes
+                    industriales. Nuestro equipo garantiza cordones de alta
+                    resistencia y acabados limpios, integrando el maquinado
+                    post-soldadura cuando se requiere.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div
+            class="flip-card reveal"
+            onclick="toggleFlip(this)"
+            style="transition-delay: 0.3s"
+          >
+            <div class="flip-inner">
+              <div class="flip-front">
+                <img
+                  src="https://images.unsplash.com/photo-1565514020179-026b92b2d70b?w=600&q=75&auto=format&fit=crop"
+                  alt="Automatización industrial"
+                  loading="lazy"
+                />
+                <div class="flip-front-body">
+                  <div class="flip-service-icon">
+                    <i class="fas fa-robot"></i>
+                  </div>
+                  <h3>Automatización e Integración de Procesos</h3>
+                </div>
+                <div class="flip-hint">
+                  <i class="fas fa-hand-pointer"></i> Click para más info
+                </div>
+              </div>
+              <div class="flip-back">
+                <div class="flip-back-img">
+                  <img
+                    src="https://images.unsplash.com/photo-1565514020179-026b92b2d70b?w=600&q=60&auto=format&fit=crop"
+                    alt=""
+                    loading="lazy"
+                  />
+                </div>
+                <div class="flip-close" onclick="closeFlip(event, this)">
+                  <i class="fas fa-times"></i>
+                </div>
+                <div class="flip-back-content">
+                  <div class="tag">Industria 4.0</div>
+                  <h3>Automatización e Integración Industrial</h3>
+                  <p>
+                    Diseñamos e integramos sistemas de automatización para
+                    líneas de producción: celdas de manufactura, fixtures
+                    inteligentes, sistemas de alimentación automática y control
+                    por PLC. Mejoramos la eficiencia de sus procesos con
+                    soluciones a la medida de su planta.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="sep"></div>
+
+    <!-- =====================================================
+     INDUSTRIAS
+====================================================== -->
+    <section id="industrias">
+      <div class="container">
+        <div class="reveal">
+          <p class="section-label">Sectores que Atendemos</p>
+          <h2 class="section-title">
+            Industrias que <span>confían en nosotros</span>
+          </h2>
+          <p class="section-desc">
+            Nuestra versatilidad nos permite atender proyectos en los sectores
+            más demandantes, adaptando procesos y materiales a las normativas y
+            requerimientos de cada industria.
+          </p>
+        </div>
+
+        <div class="industries-flex" id="industriasGrid">
+          <!-- Automotriz -->
+          <div class="industry-card reveal">
+            <img
+              src="https://images.unsplash.com/photo-1617469767053-d3b523a0b982?w=800&q=75&auto=format&fit=crop"
+              alt="Industria automotriz"
+              loading="lazy"
+            />
+            <div class="industry-overlay">
+              <div class="industry-icon"><i class="fas fa-car"></i></div>
+              <h3>Automotriz</h3>
+              <p>
+                Componentes de alta tolerancia para líneas de ensamble y
+                sistemas de transmisión.
+              </p>
+            </div>
+          </div>
+
+          <!-- Petrolera -->
+          <div class="industry-card reveal" style="transition-delay: 0.1s">
+            <img
+              src="https://images.unsplash.com/photo-1518709766631-a6a7f45921c3?w=800&q=75&auto=format&fit=crop"
+              alt="Industria petrolera"
+              loading="lazy"
+            />
+            <div class="industry-overlay">
+              <div class="industry-icon"><i class="fas fa-oil-can"></i></div>
+              <h3>Petrolera</h3>
+              <p>
+                Piezas y válvulas resistentes a entornos de alta presión y
+                temperatura para el sector Oil & Gas.
+              </p>
+            </div>
+          </div>
+
+          <!-- Eléctrica -->
+          <div class="industry-card reveal" style="transition-delay: 0.15s">
+            <img
+              src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&q=75&auto=format&fit=crop"
+              alt="Industria eléctrica"
+              loading="lazy"
+            />
+            <div class="industry-overlay">
+              <div class="industry-icon"><i class="fas fa-bolt"></i></div>
+              <h3>Eléctrica</h3>
+              <p>
+                Gabinetes, soportes y componentes estructurales para
+                infraestructura eléctrica y subestaciones.
+              </p>
+            </div>
+          </div>
+
+          <!-- Alimenticia -->
+          <div class="industry-card reveal" style="transition-delay: 0.2s">
+            <img
+              src="https://images.unsplash.com/photo-1582580894907-d8a4befd38b2?w=800&q=75&auto=format&fit=crop"
+              alt="Industria alimenticia"
+              loading="lazy"
+            />
+            <div class="industry-overlay">
+              <div class="industry-icon"><i class="fas fa-industry"></i></div>
+              <h3>Alimenticia</h3>
+              <p>
+                Piezas en acero sanitario (AISI 316L) para equipos de
+                procesamiento de alimentos con normativas FDA.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="sep"></div>
+
+    <!-- =====================================================
+     CAPACIDADES
+====================================================== -->
+    <section id="capacidades">
+      <div class="container">
+        <div class="reveal" style="text-align: center; margin-bottom: 0">
+          <p class="section-label">Equipamiento</p>
+          <h2 class="section-title">Nuestras <span>Capacidades</span></h2>
+          <p class="section-desc" style="margin: 0.75rem auto 0">
+            Contamos con un taller equipado con maquinaria de última generación
+            para responder a cualquier requerimiento de manufactura, sin
+            importar la complejidad o el material.
+          </p>
+        </div>
+
+        <div class="capacidades-grid">
+          <div>
+            <p
+              style="
+                font-size: 0.8rem;
+                color: var(--gray);
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                font-weight: 600;
+                margin-bottom: 1rem;
+              "
+            >
+              Equipo Disponible
+            </p>
+            <div class="cap-list" id="capList">
+              <div class="cap-item reveal">
+                <div class="cap-dot"></div>
+                <p>
+                  Centro de maquinado vertical CNC (3 y 4 ejes) — Capacidad
+                  hasta 1000 × 600 × 600 mm
+                </p>
+              </div>
+              <div class="cap-item reveal" style="transition-delay: 0.05s">
+                <div class="cap-dot"></div>
+                <p>
+                  Torno CNC de alta velocidad — Diámetros hasta ∅500 mm,
+                  longitud hasta 1000 mm
+                </p>
+              </div>
+              <div class="cap-item reveal" style="transition-delay: 0.1s">
+                <div class="cap-dot"></div>
+                <p>
+                  Fresadora CNC 5 ejes — Mecanizado de geometrías complejas en
+                  una sola sujeción
+                </p>
+              </div>
+              <div class="cap-item reveal" style="transition-delay: 0.15s">
+                <div class="cap-dot"></div>
+                <p>
+                  Electroerosionadora por hilo (Wire EDM) — Corte de alta
+                  precisión en materiales endurecidos
+                </p>
+              </div>
+              <div class="cap-item reveal" style="transition-delay: 0.2s">
+                <div class="cap-dot"></div>
+                <p>
+                  Electroerosionadora por penetración (Sinker EDM) — Cavidades y
+                  moldes de alta complejidad
+                </p>
+              </div>
+              <div class="cap-item reveal" style="transition-delay: 0.25s">
+                <div class="cap-dot"></div>
+                <p>
+                  Rectificadora cilíndrica y de superficie — Acabados Ra ≤ 0.4
+                  µm
+                </p>
+              </div>
+              <div class="cap-item reveal" style="transition-delay: 0.3s">
+                <div class="cap-dot"></div>
+                <p>
+                  Equipo de soldadura TIG, MIG/MAG — Acero, inoxidable y
+                  aluminio
+                </p>
+              </div>
+              <div class="cap-item reveal" style="transition-delay: 0.35s">
+                <div class="cap-dot"></div>
+                <p>
+                  Máquina de medición por coordenadas (CMM) — Verificación
+                  dimensional certificada
+                </p>
+              </div>
+            </div>
+            <div class="cap-note reveal">
+              <p id="capNote">
+                "Listos para trabajar cualquier orden, de cualquier cliente, en
+                cualquier material — con tiempos de respuesta competitivos y
+                calidad documentada."
+              </p>
+            </div>
+          </div>
+
+          <div class="cap-img reveal-right">
+            <img
+              id="capImg"
+              src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&q=80&auto=format&fit=crop"
+              alt="Maquinaria CNC de precisión"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="sep"></div>
+
+    <!-- =====================================================
+     GALERÍA
+====================================================== -->
+    <section id="galeria">
+      <div class="container">
+        <div class="gallery-header">
+          <div class="reveal">
+            <p class="section-label">Proyectos Realizados</p>
+            <h2 class="section-title">Galería de <span>Trabajo</span></h2>
+          </div>
+          <a
+            href="#contacto"
+            class="btn btn-outline reveal"
+            style="flex-shrink: 0"
+          >
+            <i class="fas fa-paper-plane"></i> Cotiza el tuyo
+          </a>
+        </div>
+
+        <div class="gallery-grid reveal" id="galGrid">
+          <div
+            class="gallery-item"
+            onclick="
+              openLightbox(
+                'https://images.unsplash.com/photo-1565087940892-f8e8b9c2c7f1?w=1200&q=90',
+              )
+            "
+          >
+            <img
+              src="https://images.unsplash.com/photo-1565087940892-f8e8b9c2c7f1?w=700&q=75&auto=format&fit=crop"
+              alt="Pieza maquinada CNC"
+              loading="lazy"
+            />
+            <div class="gallery-overlay">
+              <span>Piezas de Precisión CNC</span>
+            </div>
+          </div>
+
+          <div
+            class="gallery-item"
+            onclick="
+              openLightbox(
+                'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1200&q=90',
+              )
+            "
+          >
+            <img
+              src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=500&q=75&auto=format&fit=crop"
+              alt="Erosionado en hilo"
+              loading="lazy"
+            />
+            <div class="gallery-overlay"><span>Erosionado EDM</span></div>
+          </div>
+
+          <div
+            class="gallery-item"
+            onclick="
+              openLightbox(
+                'https://images.unsplash.com/photo-1581092160607-ee22731c9a4c?w=1200&q=90',
+              )
+            "
+          >
+            <img
+              src="https://images.unsplash.com/photo-1581092160607-ee22731c9a4c?w=500&q=75&auto=format&fit=crop"
+              alt="Taller CNC"
+              loading="lazy"
+            />
+            <div class="gallery-overlay"><span>Centro de Maquinado</span></div>
+          </div>
+
+          <div
+            class="gallery-item"
+            onclick="
+              openLightbox(
+                'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&q=90',
+              )
+            "
+          >
+            <img
+              src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=500&q=75&auto=format&fit=crop"
+              alt="Soldadura industrial"
+              loading="lazy"
+            />
+            <div class="gallery-overlay">
+              <span>Soldadura Industrial TIG</span>
+            </div>
+          </div>
+
+          <div
+            class="gallery-item"
+            onclick="
+              openLightbox(
+                'https://images.unsplash.com/photo-1565514020179-026b92b2d70b?w=1200&q=90',
+              )
+            "
+          >
+            <img
+              src="https://images.unsplash.com/photo-1565514020179-026b92b2d70b?w=500&q=75&auto=format&fit=crop"
+              alt="Automatización industrial"
+              loading="lazy"
+            />
+            <div class="gallery-overlay">
+              <span>Automatización de Procesos</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+      <div class="lightbox-close"><i class="fas fa-times"></i></div>
+      <img id="lightboxImg" src="" alt="Vista ampliada" />
+    </div>
+
+    <!-- =====================================================
+     CLIENTES
+====================================================== -->
+    <section id="clientes">
+      <div class="container">
+        <div class="clients-header reveal">
+          <p class="section-label">Confianza que respalda</p>
+          <h2 class="section-title">Clientes que nos <span>eligen</span></h2>
+          <p class="section-desc" style="margin: 0.75rem auto 0">
+            Empresas líderes de distintas industrias confían en Maquinados Jaco
+            para sus proyectos de mayor exigencia técnica.
+          </p>
+        </div>
+      </div>
+
+      <div class="carousel-track-wrapper">
+        <div class="carousel-track" id="carouselTrack">
+          <!-- Clientes (duplicados para loop infinito) -->
+          <div class="client-card">
+            <i class="fas fa-building"></i><span>Cliente 1</span>
+          </div>
+          <div class="client-card">
+            <i class="fas fa-building"></i><span>Cliente 2</span>
+          </div>
+          <div class="client-card">
+            <i class="fas fa-building"></i><span>Cliente 3</span>
+          </div>
+          <div class="client-card">
+            <i class="fas fa-building"></i><span>Cliente 4</span>
+          </div>
+          <div class="client-card">
+            <i class="fas fa-building"></i><span>Cliente 5</span>
+          </div>
+          <!-- Duplicados -->
+          <div class="client-card">
+            <i class="fas fa-building"></i><span>Cliente 1</span>
+          </div>
+          <div class="client-card">
+            <i class="fas fa-building"></i><span>Cliente 2</span>
+          </div>
+          <div class="client-card">
+            <i class="fas fa-building"></i><span>Cliente 3</span>
+          </div>
+          <div class="client-card">
+            <i class="fas fa-building"></i><span>Cliente 4</span>
+          </div>
+          <div class="client-card">
+            <i class="fas fa-building"></i><span>Cliente 5</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="sep"></div>
+
+    <!-- =====================================================
+     CONTACTO
+====================================================== -->
+    <section id="contacto">
+      <div class="container">
+        <div class="reveal">
+          <p class="section-label">Hablemos</p>
+          <h2 class="section-title">Contáctanos para <span>Cotizar</span></h2>
+          <p class="section-desc">
+            Cuéntanos tu proyecto. Nuestro equipo técnico lo analizará y te
+            responderá con una propuesta en el menor tiempo posible.
+          </p>
+        </div>
+
+        <div class="contact-grid">
+          <!-- Info -->
+          <div class="contact-info">
+            <div class="contact-item reveal">
+              <div class="contact-icon"><i class="fas fa-phone"></i></div>
+              <div>
+                <h4>Teléfono / WhatsApp</h4>
+                <a id="contactPhone" href="tel:8114883334">811 488 3334</a>
+              </div>
+            </div>
+            <div class="contact-item reveal" style="transition-delay: 0.07s">
+              <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+              <div>
+                <h4>Correo Electrónico</h4>
+                <a id="contactEmail" href="mailto:contacto@maquinadosjaco.com"
+                  >contacto@maquinadosjaco.com</a
+                >
+              </div>
+            </div>
+            <div class="contact-item reveal" style="transition-delay: 0.14s">
+              <div class="contact-icon">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div>
+                <h4>Ubicación</h4>
+                <p id="contactAddress">Fresno 2112, Moderna<br />64530 Monterrey, N.L., México</p>
+              </div>
+            </div>
+            <div class="contact-item reveal" style="transition-delay: 0.21s">
+              <div class="contact-icon"><i class="fas fa-clock"></i></div>
+              <div>
+                <h4>Horario de Atención</h4>
+                <p id="contactHours">
+                  Lun – Vie: 8:00 a.m. – 6:00 p.m.<br />Sáb: 9:00 a.m. – 1:00
+                  p.m.
+                </p>
+              </div>
+            </div>
+
+            <!-- Google Maps -->
+            <div class="map-container reveal">
+              <iframe
+                title="Ubicación Maquinados Jaco"
+                id="contactMaps"
+              src="https://maps.google.com/maps?q=Fresno+2112,+Moderna,+Monterrey,+Nuevo+León,+México&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+              >
+              </iframe>
+            </div>
+          </div>
+
+          <!-- Formulario -->
+          <div class="contact-form-box reveal-right">
+            <h3>Envía tu solicitud</h3>
+            <form id="contactForm" onsubmit="handleFormSubmit(event)">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Nombre</label>
+                  <input
+                    type="text"
+                    placeholder="Tu nombre completo"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Empresa</label>
+                  <input type="text" placeholder="Razón social o empresa" />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Teléfono</label>
+                  <input type="tel" placeholder="(81) 0000-0000" />
+                </div>
+                <div class="form-group">
+                  <label>Correo</label>
+                  <input
+                    type="email"
+                    placeholder="correo@empresa.com"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Servicio de interés</label>
+                <select>
+                  <option value="">— Selecciona un servicio —</option>
+                  <option>Fabricación de Piezas CNC</option>
+                  <option>Erosionado en Hilo y Penetración</option>
+                  <option>Fabricación y Soldadura</option>
+                  <option>Automatización e Integración Industrial</option>
+                  <option>Otro / Varios</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Descripción del proyecto</label>
+                <textarea
+                  placeholder="Cuéntanos las características de tu pieza, material, cantidad, tolerancias o cualquier detalle relevante…"
+                  required
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                style="width: 100%; justify-content: center; margin-top: 0.5rem"
+              >
+                <i class="fas fa-paper-plane"></i> Enviar Solicitud
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+     FOOTER
+====================================================== -->
+    <footer id="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <!-- Brand -->
+          <div class="footer-brand">
+            <a href="#hero" class="logo">
+              <img
+                src="MaquinadosJaco.png"
+                alt="Maquinados Jaco"
+                style="
+                  height: 100px;
+                  width: auto;
+                  object-fit: contain;
+                  display: block;
+                "
+              />
+            </a>
+            <p id="footerTagline">
+              Diseño y manufactura CNC de precisión en Monterrey, N.L.
+              Fabricamos desde una sola pieza, sin mínimos de producción, con
+              calidad y tiempos de entrega garantizados.
+            </p>
+            <div class="footer-socials">
+              <a id="footerSocialFb" href="#" aria-label="Facebook" title="Facebook"
+                ><i class="fab fa-facebook-f"></i
+              ></a>
+              <a id="footerSocialIg" href="#" aria-label="Instagram" title="Instagram"
+                ><i class="fab fa-instagram"></i
+              ></a>
+              <a id="footerSocialLi" href="#" aria-label="LinkedIn" title="LinkedIn"
+                ><i class="fab fa-linkedin-in"></i
+              ></a>
+            </div>
+          </div>
+
+          <!-- Navegación -->
+          <div class="footer-col">
+            <h4>Navegación</h4>
+            <ul>
+              <li><a href="#nosotros">Nosotros</a></li>
+              <li><a href="#servicios">Servicios</a></li>
+              <li><a href="#industrias">Industrias</a></li>
+              <li><a href="#capacidades">Capacidades</a></li>
+              <li><a href="#galeria">Galería</a></li>
+              <li><a href="#contacto">Contacto</a></li>
+            </ul>
+          </div>
+
+          <!-- Servicios -->
+          <div class="footer-col">
+            <h4>Servicios</h4>
+            <ul>
+              <li><a href="#servicios">Fabricación CNC</a></li>
+              <li><a href="#servicios">Erosionado EDM</a></li>
+              <li><a href="#servicios">Soldadura Industrial</a></li>
+              <li><a href="#servicios">Automatización</a></li>
+            </ul>
+          </div>
+
+          <!-- Contacto -->
+          <div class="footer-col">
+            <h4>Contacto</h4>
+            <ul class="footer-contact-list">
+              <li>
+                <i class="fas fa-phone"></i
+                ><span
+                  ><a href="tel:8114883334" style="color: inherit"
+                    >811 488 3334</a
+                  ></span
+                >
+              </li>
+              <li>
+                <i class="fas fa-envelope"></i
+                ><span
+                  ><a
+                    href="mailto:contacto@maquinadosjaco.com"
+                    style="color: inherit"
+                    >contacto@maquinadosjaco.com</a
+                  ></span
+                >
+              </li>
+              <li>
+                <i class="fas fa-map-marker-alt"></i
+                ><span>Fresno 2112, Moderna<br />64530 Monterrey, N.L.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p id="footerCopyright">
+            © 2026 <span>Maquinados Jaco</span>. Todos los derechos reservados.
+          </p>
+          <p id="footerDesigner">Diseñado por Mario Vidaña</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- =====================================================
+     WHATSAPP BUBBLE
+====================================================== -->
+    <a
+      class="wa-bubble"
+      href="https://wa.me/528114883334?text=Quiero%20una%20cotizaci%C3%B3n"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Contactar por WhatsApp"
+    >
+      <span class="wa-tooltip">Quiero una cotización</span>
+      <div class="wa-btn">
+        <i class="fab fa-whatsapp"></i>
+        <div class="wa-pulse"></div>
+      </div>
+    </a>
+
+    <!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+    <script>
+      /* ----- HEADER SCROLL ----- */
+      const header = document.getElementById("header");
+      window.addEventListener("scroll", () => {
+        header.classList.toggle("scrolled", window.scrollY > 50);
+      });
+
+      /* ----- HAMBURGER MENU ----- */
+      const hamburger = document.getElementById("hamburger");
+      const mobileMenu = document.getElementById("mobileMenu");
+      hamburger.addEventListener("click", () => {
+        const open = mobileMenu.style.display === "flex";
+        mobileMenu.style.display = open ? "none" : "flex";
+      });
+      document.querySelectorAll(".mobile-link").forEach((link) => {
+        link.addEventListener("click", () => {
+          mobileMenu.style.display = "none";
+        });
+      });
+
+      /* ----- SCROLL REVEAL ----- */
+      const revealEls = document.querySelectorAll(
+        ".reveal, .reveal-left, .reveal-right",
+      );
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("visible");
+              observer.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: "0px 0px -60px 0px" },
+      );
+      revealEls.forEach((el) => observer.observe(el));
+
+      /* ----- FLIP CARDS ----- */
+      function toggleFlip(card) {
+        // Close all others first
+        document.querySelectorAll(".flip-card.flipped").forEach((c) => {
+          if (c !== card) c.classList.remove("flipped");
+        });
+        card.classList.toggle("flipped");
+      }
+      function closeFlip(event, btn) {
+        event.stopPropagation();
+        btn.closest(".flip-card").classList.remove("flipped");
+      }
+
+      /* ----- LIGHTBOX ----- */
+      const lightbox = document.getElementById("lightbox");
+      const lightboxImg = document.getElementById("lightboxImg");
+      function openLightbox(src) {
+        lightboxImg.src = src;
+        lightbox.classList.add("active");
+        document.body.style.overflow = "hidden";
+      }
+      function closeLightbox() {
+        lightbox.classList.remove("active");
+        document.body.style.overflow = "";
+        setTimeout(() => {
+          lightboxImg.src = "";
+        }, 300);
+      }
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeLightbox();
+      });
+
+      /* ----- FORM SUBMIT ----- */
+      function handleFormSubmit(e) {
+        e.preventDefault();
+        const btn = e.target.querySelector('button[type="submit"]');
+        const orig = btn.innerHTML;
+        btn.innerHTML =
+          '<i class="fas fa-check"></i> ¡Enviado! Nos pondremos en contacto pronto.';
+        btn.style.background = "#1a7a45";
+        btn.disabled = true;
+        setTimeout(() => {
+          btn.innerHTML = orig;
+          btn.style.background = "";
+          btn.disabled = false;
+          e.target.reset();
+        }, 4500);
+      }
+
+      /* ----- ACTIVE NAV LINK ON SCROLL ----- */
+      const sections = document.querySelectorAll("section[id]");
+      const navLinks = document.querySelectorAll(".nav-links a");
+      window.addEventListener(
+        "scroll",
+        () => {
+          let current = "";
+          sections.forEach((s) => {
+            if (window.scrollY >= s.offsetTop - 140) current = s.id;
+          });
+          navLinks.forEach((a) => {
+            a.style.color =
+              a.getAttribute("href") === "#" + current ? "var(--white)" : "";
+          });
+        },
+        { passive: true },
+      );
+    </script>
+
+    <!-- =====================================================
+     CMS CONTENT LOADER — hydrates DOM from content.json via /api/content
+====================================================== -->
+    <script>
+      /* Escape text before inserting into innerHTML templates */
+      function _e(str) {
+        if (str == null) return "";
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      /* IntersectionObserver for elements added dynamically by the CMS */
+      const cmsRevealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("visible");
+              cmsRevealObserver.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: "0px 0px -60px 0px" },
+      );
+
+      (async function loadCMS() {
+        let C;
+        try {
+          const r = await fetch("/api/content?t=" + Date.now());
+          if (!r.ok) return; // keep static HTML fallback
+          C = await r.json();
+        } catch {
+          return; // network error — static fallback remains
+        }
+
+        const setText = (id, val) => {
+          const el = document.getElementById(id);
+          if (el && val != null) el.textContent = val;
+        };
+        const setHtml = (id, html) => {
+          const el = document.getElementById(id);
+          if (el && html != null) el.innerHTML = html;
+        };
+        const setSrc = (id, val) => {
+          const el = document.getElementById(id);
+          if (el && val) el.src = val;
+        };
+        const setHref = (id, val) => {
+          const el = document.getElementById(id);
+          if (el && val) el.href = val;
+        };
+
+        /* ── HERO ─────────────────────────────── */
+        const H = C.hero || {};
+        setText("heroBadge", H.badge);
+        if (H.headline_line1) {
+          setHtml(
+            "heroTitle",
+            `${_e(H.headline_line1)}<br/><span class="accent">${_e(H.headline_accent)}</span><br/>${_e(H.headline_line3)}`,
+          );
+        }
+        setText("heroSub", H.subheading);
+        setText("heroCta1", H.cta_primary);
+        setText("heroCta2", H.cta_secondary);
+        if (H.bg_image_url) {
+          const sec = document.getElementById("hero");
+          if (sec) {
+            sec.style.backgroundImage = `linear-gradient(135deg,rgba(1,42,132,.7) 0%,rgba(13,13,13,.85) 50%,rgba(223,4,10,.25) 100%),url("${H.bg_image_url}")`;
+          }
+        }
+
+        /* ── NOSOTROS ─────────────────────────── */
+        const N = C.nosotros || {};
+        setSrc("nosotrosImg", N.image_url);
+        setText("nosotrosBadgeStrong", N.badge_strong);
+        setText("nosotrosBadgeSpan", N.badge_span);
+        setText("nosotrosLabel", N.label);
+        if (N.headline_main) {
+          setHtml(
+            "nosotrosTitle",
+            `${_e(N.headline_main)}<br/><span>${_e(N.headline_accent)}</span>`,
+          );
+        }
+        setText("nosotrosDesc1", N.desc1);
+        setText("nosotrosDesc2", N.desc2);
+        setText("nosotrosMision", N.mision);
+        setText("nosotrosVision", N.vision);
+
+        /* ── SERVICIOS ────────────────────────── */
+        if (Array.isArray(C.servicios) && C.servicios.length) {
+          const grid = document.getElementById("servicesGrid");
+          if (grid) {
+            grid.innerHTML = C.servicios
+              .map(
+                (s, i) => `
+              <div class="flip-card reveal" onclick="toggleFlip(this)"${i > 0 ? ` style="transition-delay:${i * 0.1}s"` : ""}>
+                <div class="flip-inner">
+                  <div class="flip-front">
+                    <img src="${_e(s.front_image_url)}" alt="${_e(s.front_title)}" loading="lazy"/>
+                    <div class="flip-front-body">
+                      <div class="flip-service-icon"><i class="${_e(s.front_icon)}"></i></div>
+                      <h3>${_e(s.front_title)}</h3>
+                    </div>
+                    <div class="flip-hint"><i class="fas fa-hand-pointer"></i> Click para más info</div>
+                  </div>
+                  <div class="flip-back">
+                    <div class="flip-back-img"><img src="${_e(s.back_image_url)}" alt="" loading="lazy"/></div>
+                    <div class="flip-close" onclick="closeFlip(event,this)"><i class="fas fa-times"></i></div>
+                    <div class="flip-back-content">
+                      <div class="tag">${_e(s.back_tag)}</div>
+                      <h3>${_e(s.back_title)}</h3>
+                      <p>${_e(s.back_desc)}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>`,
+              )
+              .join("");
+            grid
+              .querySelectorAll(".reveal")
+              .forEach((el) => cmsRevealObserver.observe(el));
+          }
+        }
+
+        /* ── INDUSTRIAS ───────────────────────── */
+        if (Array.isArray(C.industrias) && C.industrias.length) {
+          const grid = document.getElementById("industriasGrid");
+          if (grid) {
+            grid.innerHTML = C.industrias
+              .map(
+                (ind, i) => `
+              <div class="industry-card reveal"${i > 0 ? ` style="transition-delay:${i * 0.05}s"` : ""}>
+                <img src="${_e(ind.image_url)}" alt="${_e(ind.name)}" loading="lazy"/>
+                <div class="industry-overlay">
+                  <div class="industry-icon"><i class="${_e(ind.icon)}"></i></div>
+                  <h3>${_e(ind.name)}</h3>
+                  <p>${_e(ind.desc)}</p>
+                </div>
+              </div>`,
+              )
+              .join("");
+            grid
+              .querySelectorAll(".reveal")
+              .forEach((el) => cmsRevealObserver.observe(el));
+          }
+        }
+
+        /* ── CAPACIDADES ──────────────────────── */
+        const CAP = C.capacidades || {};
+        if (Array.isArray(CAP.items) && CAP.items.length) {
+          const list = document.getElementById("capList");
+          if (list) {
+            list.innerHTML = CAP.items
+              .map(
+                (item, i) => `
+              <div class="cap-item reveal"${i > 0 ? ` style="transition-delay:${i * 0.05}s"` : ""}>
+                <div class="cap-dot"></div>
+                <p>${_e(item)}</p>
+              </div>`,
+              )
+              .join("");
+            list
+              .querySelectorAll(".reveal")
+              .forEach((el) => cmsRevealObserver.observe(el));
+          }
+        }
+        setText("capNote", CAP.quote);
+        setSrc("capImg", CAP.image_url);
+
+        /* ── GALERÍA ──────────────────────────── */
+        if (Array.isArray(C.galeria) && C.galeria.length) {
+          const grid = document.getElementById("galGrid");
+          if (grid) {
+            grid.innerHTML = C.galeria
+              .map(
+                (g) => `
+              <div class="gallery-item" onclick="openLightbox('${_e(g.lightbox_url)}')">
+                <img src="${_e(g.thumb_url)}" alt="${_e(g.caption)}" loading="lazy"/>
+                <div class="gallery-overlay"><span>${_e(g.caption)}</span></div>
+              </div>`,
+              )
+              .join("");
+          }
+        }
+
+        /* ── CLIENTES ─────────────────────────── */
+        if (Array.isArray(C.clientes) && C.clientes.length) {
+          const track = document.getElementById("carouselTrack");
+          if (track) {
+            const cards = [...C.clientes, ...C.clientes]; // duplicate for infinite loop
+            track.innerHTML = cards
+              .map(
+                (cl) => `
+              <div class="client-card">
+                ${cl.logo_url ? `<img src="${_e(cl.logo_url)}" alt="${_e(cl.name)}" style="height:48px;width:auto;object-fit:contain;max-width:160px"/>` : `<i class="fas fa-building"></i>`}
+                <span>${_e(cl.name)}</span>
+              </div>`,
+              )
+              .join("");
+          }
+        }
+
+        /* ── CONTACTO ─────────────────────────── */
+        const CO = C.contacto || {};
+        const phoneEl = document.getElementById("contactPhone");
+        if (phoneEl) {
+          if (CO.phone_display) phoneEl.textContent = CO.phone_display;
+          if (CO.phone_href) phoneEl.href = CO.phone_href;
+        }
+        const emailEl = document.getElementById("contactEmail");
+        if (emailEl) {
+          if (CO.email) emailEl.textContent = CO.email;
+          if (CO.email) emailEl.href = "mailto:" + CO.email;
+        }
+        if (CO.address_line1) {
+          setHtml(
+            "contactAddress",
+            `${_e(CO.address_line1)}<br/>${_e(CO.address_line2)}`,
+          );
+        }
+        if (CO.hours_weekday) {
+          setHtml(
+            "contactHours",
+            `${_e(CO.hours_weekday)}<br/>${_e(CO.hours_saturday)}`,
+          );
+        }
+        const mapsEl = document.getElementById("contactMaps");
+        if (mapsEl && CO.maps_embed_src) mapsEl.src = CO.maps_embed_src;
+
+        const waEl = document.querySelector(".wa-bubble");
+        if (waEl && CO.whatsapp_href) waEl.href = CO.whatsapp_href;
+
+        /* ── FOOTER ───────────────────────────── */
+        const F = C.footer || {};
+        setText("footerTagline", F.tagline);
+        setText("footerCopyright", F.copyright);
+        setText("footerDesigner", F.designer);
+        setHref("footerSocialFb", F.social_facebook);
+        setHref("footerSocialIg", F.social_instagram);
+        setHref("footerSocialLi", F.social_linkedin);
+      })();
+    </script>
+  </body>
+</html>
