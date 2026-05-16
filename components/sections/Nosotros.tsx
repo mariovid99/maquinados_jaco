@@ -49,9 +49,9 @@ export default function Nosotros({ data }: Props) {
             </div>
           </FadeInUp>
           <FadeInUp delay={0.2}>
-            <div className="grid md:grid-cols-2 gap-6 mt-6 max-w-3xl">
+            <div className="flex flex-col gap-4 mt-6 max-w-2xl">
               <p className="text-gray-600 leading-relaxed">{data.desc1}</p>
-              <p className="text-gray-600 leading-relaxed">{data.desc2}</p>
+              {data.desc2 && <p className="text-gray-600 leading-relaxed">{data.desc2}</p>}
             </div>
           </FadeInUp>
         </div>
