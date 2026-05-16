@@ -1,0 +1,156 @@
+@import "tailwindcss";
+
+@theme {
+  /* ── Brand Colors ── */
+  --color-jaco-blue: #001A8B;
+  --color-jaco-blue-deep: #0A1342;
+  --color-jaco-red: #B90001;
+  --color-jaco-black: #0A0A0A;
+  --color-jaco-white: #FFFFFF;
+  --color-jaco-bone: #F7F5F0;
+
+  /* ── Grays ── */
+  --color-gray-50: #FAFAFA;
+  --color-gray-100: #F1F1F2;
+  --color-gray-300: #D1D1D6;
+  --color-gray-500: #6B6B70;
+  --color-gray-700: #3A3A3F;
+  --color-gray-900: #1A1A1D;
+
+  /* ── Fonts ── */
+  --font-display: var(--font-bebas-neue);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-space-grotesk);
+
+  /* ── Easings ── */
+  --ease-industrial: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-smooth: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* ── Base ── */
+html {
+  overflow-x: hidden;
+}
+
+body {
+  background-color: #FFFFFF;
+  color: #0A0A0A;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Skip to content ── */
+.skip-to-content {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 9999;
+  padding: 0.5rem 1rem;
+  background: #B90001;
+  color: white;
+  font-weight: 600;
+  border-radius: 0 0 4px 4px;
+  transition: top 0.2s;
+}
+.skip-to-content:focus {
+  top: 0;
+}
+
+/* ── Focus ── */
+*:focus-visible {
+  outline: 2px solid #B90001;
+  outline-offset: 2px;
+}
+
+/* ── Clip Paths ── */
+.clip-shard-tl { clip-path: polygon(15% 0, 100% 0, 100% 100%, 0 100%, 0 15%); }
+.clip-shard-tr { clip-path: polygon(0 0, 85% 0, 100% 15%, 100% 100%, 0 100%); }
+.clip-shard-br { clip-path: polygon(0 0, 100% 0, 100% 85%, 85% 100%, 0 100%); }
+.clip-shard-bl { clip-path: polygon(0 0, 100% 0, 100% 100%, 15% 100%, 0 85%); }
+.clip-parallelogram { clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%); }
+.clip-arrow-r { clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%); }
+.clip-card { clip-path: polygon(0 0, 100% 0, 100% calc(100% - 24px), calc(100% - 24px) 100%, 0 100%); }
+
+/* ── Dot grid background pattern ── */
+.dot-grid {
+  background-image: radial-gradient(circle, #001A8B22 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* ── Red accent bar ── */
+.red-bar {
+  display: inline-block;
+  width: 60px;
+  height: 3px;
+  background: #B90001;
+  border-radius: 1px;
+}
+
+/* ── Section number watermark ── */
+.section-num {
+  position: absolute;
+  font-family: var(--font-bebas-neue), sans-serif;
+  font-size: clamp(6rem, 12vw, 10rem);
+  line-height: 1;
+  color: #F1F1F2;
+  user-select: none;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Scrollbar styling ── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F1F1F2;
+}
+::-webkit-scrollbar-thumb {
+  background: #001A8B;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #B90001;
+}
+
+/* ── Custom cursor hide on mobile ── */
+@media (hover: none) {
+  .custom-cursor, .custom-cursor-ring {
+    display: none !important;
+  }
+}
+
+/* ── Marquee animation ── */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  animation: marquee 30s linear infinite;
+  display: flex;
+  width: max-content;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* ── WhatsApp pulse ── */
+@keyframes wa-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5); }
+  50% { box-shadow: 0 0 0 12px rgba(37, 211, 102, 0); }
+}
+
+.wa-pulse {
+  animation: wa-pulse 2.5s ease-in-out infinite;
+}
+
+/* ── Loader animation ── */
+@keyframes loader-fade {
+  0% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; pointer-events: none; }
+}
