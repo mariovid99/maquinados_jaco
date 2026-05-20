@@ -87,6 +87,12 @@ function ImageUpload({ value, onChange, label, token }: {
         headers: { Authorization: `Bearer ${token}` },
         body: fd,
       });
+      if (res.status === 401) {
+        localStorage.removeItem("jaco-admin-token");
+        alert("⏱️ Tu sesión expiró. Vuelve a iniciar sesión.");
+        window.location.href = "/admin/login";
+        return;
+      }
       const data = await res.json();
       if (data.url) onChange(data.url);
     } catch {
@@ -204,6 +210,10 @@ export default function AdminPage() {
       if (res.ok) {
         setDirty(false);
         alert(`✅ Cambios guardados (versión ${data.version})`);
+      } else if (res.status === 401) {
+        localStorage.removeItem("jaco-admin-token");
+        alert("⏱️ Tu sesión expiró. Vuelve a iniciar sesión.");
+        router.replace("/admin/login");
       } else {
         alert("❌ Error: " + (data.error || "desconocido"));
       }

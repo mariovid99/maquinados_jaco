@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 
 export function signToken(payload: object): string {
   return jwt.sign(payload, process.env.JWT_SECRET!, {
-    expiresIn: "8h",
+    expiresIn: "30d",
     issuer: "maquinados-jaco-cms",
   });
 }
