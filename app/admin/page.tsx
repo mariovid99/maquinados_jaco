@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { Save, LogOut, ExternalLink, Plus, Trash2, Upload } from "lucide-react";
+import { Save, LogOut, ExternalLink, Plus, Trash2, Upload, Eye } from "lucide-react";
 import { SiteContent, HitoItem, GaleriaItem, PasoItem, TecnicaItem, PilarItem, SoftwareItem, ColumnaServicio, MarcaItem, ClienteItem, FaqItem } from "@/types/content";
 import { migrateContent } from "@/lib/content-migration";
 
@@ -222,6 +222,12 @@ export default function AdminPage() {
     } finally {
       setSaving(false);
     }
+  };
+
+  const handlePreview = () => {
+    if (!content) return;
+    localStorage.setItem("jaco-preview-content", JSON.stringify(content));
+    window.open("/preview", "_blank");
   };
 
   const handleLogout = () => {
@@ -622,6 +628,15 @@ export default function AdminPage() {
           {dirty && <span className="px-2 py-0.5 text-xs bg-amber-100 text-amber-700 rounded">Sin guardar</span>}
         </div>
         <div className="flex items-center gap-2">
+          <button
+            onClick={handlePreview}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded border transition-colors"
+            style={{ color: "#92620a", borderColor: "#f6c96b", background: "#fef9ec" }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = "#fef0c4"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = "#fef9ec"; }}
+          >
+            <Eye className="w-3.5 h-3.5" /> Vista previa
+          </button>
           <a href="/" target="_blank" rel="noopener noreferrer"
             className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 border border-gray-200 rounded hover:border-gray-400 transition-colors">
             <ExternalLink className="w-3.5 h-3.5" /> Ver sitio
