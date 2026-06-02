@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "motion/react";
 import FadeInUp from "@/components/animations/FadeInUp";
 import AccentBar from "@/components/animations/AccentBar";
@@ -59,18 +60,36 @@ export default function Tecnologia({ data }: Props) {
               viewport={{ once: true, margin: "-30px" }}
               transition={{ delay: i * 0.05, duration: 0.4 }}
             >
-              {/* Placeholder logo — replace with actual SVG files */}
-              <div
-                className="w-12 h-12 rounded flex items-center justify-center mb-2 grayscale group-hover:grayscale-0 transition-all duration-300"
-                style={{ background: "#F1F1F2" }}
-              >
-                <span className="font-display text-xs text-center leading-tight text-gray-600 group-hover:text-jaco-blue px-1">
-                  {sw.name.split(" ")[0]}
-                </span>
-              </div>
-              <span className="text-xs text-gray-400 text-center leading-tight group-hover:text-gray-700 transition-colors">
-                {sw.name}
-              </span>
+              {sw.logo_url ? (
+                <>
+                  <div className="relative w-12 h-12 mb-2 grayscale group-hover:grayscale-0 transition-all duration-300">
+                    <Image
+                      src={sw.logo_url}
+                      alt={sw.name}
+                      fill
+                      className="object-contain"
+                      sizes="48px"
+                    />
+                  </div>
+                  <span className="text-xs text-gray-400 text-center leading-tight group-hover:text-gray-700 transition-colors">
+                    {sw.name}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <div
+                    className="w-12 h-12 rounded flex items-center justify-center mb-2"
+                    style={{ background: "#F1F1F2" }}
+                  >
+                    <span className="font-display text-xs text-center leading-tight text-gray-600 group-hover:text-jaco-blue px-1">
+                      {sw.name.split(" ")[0]}
+                    </span>
+                  </div>
+                  <span className="text-xs text-gray-400 text-center leading-tight group-hover:text-gray-700 transition-colors">
+                    {sw.name}
+                  </span>
+                </>
+              )}
             </motion.div>
           ))}
         </div>

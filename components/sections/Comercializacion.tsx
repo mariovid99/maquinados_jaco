@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "motion/react";
 import FadeInUp from "@/components/animations/FadeInUp";
 import AccentBar from "@/components/animations/AccentBar";
@@ -66,12 +67,24 @@ export default function Comercializacion({ data }: Props) {
             {[...data.marcas, ...data.marcas].map((marca, i) => (
               <motion.div
                 key={`${marca.id}-${i}`}
-                className="shrink-0 px-6 grayscale hover:grayscale-0 transition-all duration-300 opacity-50 hover:opacity-100 flex items-center"
+                className="shrink-0 px-6 grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100 flex items-center justify-center"
                 whileHover={{ scale: 1.05 }}
               >
-                <span className="font-display text-xl text-gray-400 tracking-wider whitespace-nowrap">
-                  {marca.nombre}
-                </span>
+                {marca.logo_url ? (
+                  <div className="relative h-10 w-28">
+                    <Image
+                      src={marca.logo_url}
+                      alt={marca.nombre}
+                      fill
+                      className="object-contain"
+                      sizes="112px"
+                    />
+                  </div>
+                ) : (
+                  <span className="font-display text-xl text-gray-400 tracking-wider whitespace-nowrap">
+                    {marca.nombre}
+                  </span>
+                )}
               </motion.div>
             ))}
           </div>

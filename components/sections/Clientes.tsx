@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "motion/react";
 import FadeInUp from "@/components/animations/FadeInUp";
 import AccentBar from "@/components/animations/AccentBar";
@@ -53,16 +54,27 @@ export default function Clientes({ data }: Props) {
               viewport={{ once: true, margin: "-30px" }}
               transition={{ delay: i * 0.07, duration: 0.5 }}
             >
-              {/* Placeholder for logo — replace with <Image> once logos are available */}
               <div className="flex flex-col items-center gap-2">
-                <div
-                  className="w-16 h-16 rounded flex items-center justify-center grayscale group-hover:grayscale-0 transition-all duration-300"
-                  style={{ background: "#F7F5F0" }}
-                >
-                  <span className="font-display text-2xl text-gray-300 group-hover:text-jaco-blue transition-colors">
-                    {cliente.nombre.charAt(0)}
-                  </span>
-                </div>
+                {cliente.logo_url ? (
+                  <div className="relative w-28 h-14 grayscale group-hover:grayscale-0 transition-all duration-300">
+                    <Image
+                      src={cliente.logo_url}
+                      alt={cliente.nombre}
+                      fill
+                      className="object-contain"
+                      sizes="112px"
+                    />
+                  </div>
+                ) : (
+                  <div
+                    className="w-16 h-16 rounded flex items-center justify-center grayscale group-hover:grayscale-0 transition-all duration-300"
+                    style={{ background: "#F7F5F0" }}
+                  >
+                    <span className="font-display text-2xl text-gray-300 group-hover:text-jaco-blue transition-colors">
+                      {cliente.nombre.charAt(0)}
+                    </span>
+                  </div>
+                )}
                 <span className="text-xs text-gray-400 text-center font-mono leading-tight group-hover:text-jaco-blue transition-colors">
                   {cliente.nombre}
                 </span>
