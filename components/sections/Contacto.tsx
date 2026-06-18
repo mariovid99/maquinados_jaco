@@ -9,7 +9,7 @@ import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
 import FadeInUp from "@/components/animations/FadeInUp";
 import AccentBar from "@/components/animations/AccentBar";
 import { ContactoContent } from "@/types/content";
-import { sendContactEmail } from "@/lib/emailjs";
+import { sendContactEmail } from "@/lib/email";
 import BrandStripes from "@/components/shared/BrandStripes";
 
 const schema = z.object({

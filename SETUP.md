@@ -17,25 +17,23 @@ cp .env.example .env.local
 
 Las variables del CMS (`ADMIN_PASSWORD`, `JWT_SECRET`, `AWS_*`, `S3_BUCKET_NAME`) son las **mismas que ya tienes en Vercel** del proyecto anterior — solo cópialas.
 
-## 3. Configuración de EmailJS
+## 3. Configuración de Resend
 
-El formulario de contacto usa EmailJS (gratuito hasta 200 emails/mes).
+El formulario de contacto envía los correos vía Resend desde una API route del servidor (`/api/contact`). La API key **nunca** se expone al navegador.
 
-1. Crea cuenta en [emailjs.com](https://www.emailjs.com)
-2. Crea un "Email Service" (Gmail, Outlook, etc.)
-3. Crea un "Email Template" con estos parámetros:
-   - `{{nombre}}` — Nombre del solicitante
-   - `{{empresa}}` — Empresa
-   - `{{email}}` — Email de contacto
-   - `{{telefono}}` — Teléfono
-   - `{{servicio}}` — Tipo de servicio seleccionado
-   - `{{mensaje}}` — Mensaje del formulario
-4. Copia los IDs al `.env.local`:
+1. Crea cuenta en [resend.com](https://resend.com)
+2. Crea una API key en el dashboard
+3. Copia los valores al `.env.local`:
    ```
-   NEXT_PUBLIC_EMAILJS_SERVICE_ID=service_xxxxx
-   NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=template_xxxxx
-   NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=xxxxxxxxxxxxxxxxx
+   RESEND_API_KEY=re_xxxxxxxxxxxx
+   CONTACT_TO_EMAIL=contacto@maquinadosjaco.com
+   CONTACT_FROM_EMAIL=Maquinados JACO <onboarding@resend.dev>
    ```
+4. **Remitente (`CONTACT_FROM_EMAIL`):** mientras no verifiques tu dominio en
+   Resend, usa `onboarding@resend.dev`. Una vez que verifiques `maquinadosjaco.com`
+   (Domains → Add Domain → agrega los registros DNS), cámbialo a algo como
+   `Maquinados JACO <contacto@maquinadosjaco.com>`.
+5. Agrega estas 3 variables también en Vercel (Settings → Environment Variables).
 
 ## 4. Logos (⚠️ Acción requerida)
 
@@ -116,5 +114,5 @@ Agrega al `package.json`:
 - **Framer Motion** (`motion/react`) para animaciones de entrada y microinteracciones
 - **Lenis** para scroll suave
 - **GSAP** disponible para animations scroll-driven (importar en componentes que lo requieran)
-- **EmailJS** para formulario de contacto (sin servidor propio)
+- **Resend** para formulario de contacto (vía API route `/api/contact`)
 - **CMS Serverless** via AWS S3 + JWT — misma arquitectura del proyecto padre
